@@ -18,6 +18,7 @@ import media as M
 
 TZ = ZoneInfo("Asia/Tokyo")
 HASHTAGS = "#maps #geography #truesize #mapquiz #shorts"
+SITE = "https://2000re.github.io/wait-that-big"
 
 
 def description(info, number):
@@ -31,6 +32,8 @@ def description(info, number):
         "Flat (Mercator) maps stretch land near the poles, so countries far from the equator look much bigger than "
         "they really are. Every shape in this video is moved across the globe at its true size, and areas are "
         "calculated on the Earth's surface (WGS84), not on the flat map.",
+        "",
+        f"More true-size quizzes: {SITE}/",
         "",
         "Map data: Natural Earth (public domain).",
         "",
@@ -100,6 +103,8 @@ def main():
         "tags": tags(info),
         "answer": info["answer"],
         "video": "video.mp4",
+        "site_image": "site.jpg",
+        "site": info["site"],
         "seconds": round(info["seconds"], 1),
         "narration": info["lines"],
     }

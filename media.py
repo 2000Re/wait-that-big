@@ -316,6 +316,12 @@ def write_audio(path, end, clips, at, effects):
         w.writeframes(pcm.tobytes())
 
 
+def save_thumb(img, path, width=360):
+    """サイトの一覧に使う小さな 3:4 の JPEG(約30KB)。上の題名と下のクレジットを除いた、地図の部分を切り出す。"""
+    box = (0, 440, W, 440 + W * 4 // 3)
+    img.convert("RGB").crop(box).resize((width, width * 4 // 3), Image.LANCZOS).save(path, quality=80)
+
+
 def render(mp4, wav, end, frame_at):
     """frame_at(t) が返す RGBA 画像を並べて、音と一緒に mp4 にする。"""
     p = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",

@@ -30,6 +30,7 @@ YouTube チャンネル **Wait, That Big?**([@wait-that-big](https://www.youtube
 | `geo.py` | 国の形・面積、地球の上での移動、メルカトル図法 |
 | `media.py` | 文字・ボタン・地図の下地、Google Text-to-Speech、効果音、動画の書き出し |
 | `youtube_upload.py` | YouTube へのアップロードと `upload_history.json` への記録(標準ライブラリのみ) |
+| `site_gen.py` | サイトの回ごとのページ・一覧・sitemap を `docs/data/episodes.json` から作り直す(標準ライブラリのみ) |
 | `posted_today.py` | 定期実行で、今日もう投稿したかを調べる(1日 `MAX_PER_DAY` 本) |
 | `get_youtube_refresh_token.py` | リフレッシュトークンの取得(ローカルPCで一度だけ) |
 | `data/countries.geojson` | Natural Earth 1:50m の国境(パブリックドメイン)。`tools/prepare_data.py` で作成 |
@@ -53,6 +54,13 @@ python make_short.py --tts dummy --key "fit:Australia|Japan" --history /tmp/none
 - ホーム: https://2000re.github.io/wait-that-big/
 - プライバシーポリシー: https://2000re.github.io/wait-that-big/privacy.html
 - 利用規約: https://2000re.github.io/wait-that-big/terms.html
+
+- 動画の一覧: https://2000re.github.io/wait-that-big/v/ (回ごとのページは `v/<番号>-<題名>/`)
+
+投稿のたびに `youtube_upload.py` が `docs/data/episodes.json` に1件足して `site_gen.py` でページを作り直し、
+workflow が `docs/` ごとコミットする。回のページには動画・選択肢・「答えを見る」・面積などの数字が載る
+(overlay はクイズではないので、選択肢なしで答えを最初から出す)。一覧の画像は答えの直前の1コマ(`docs/img/`)。
+作り直すだけなら `python site_gen.py`。
 
 OAuth 同意画面の「アプリのホームページ」「プライバシーポリシー」「利用規約」に、この3つの URL を入れる。
 

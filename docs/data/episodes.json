@@ -1,0 +1,21 @@
+[
+ {
+  "number": 1,
+  "slug": "1-norway-or-algeria-which-is-bigger",
+  "format": "compare",
+  "video_id": "MVebqDw3mqE",
+  "uploaded_at": "2026-11-14T07:52:35+00:00",
+  "question": "Norway or Algeria: which is bigger?",
+  "choices": [
+   "Norway",
+   "Algeria"
+  ],
+  "answer": 1,
+  "result": "Algeria is about 6× bigger!",
+  "details": [
+   "Algeria: 2.32 million km²",
+   "Norway: 387,000 km²"
+  ],
+  "image": "img/1-norway-or-algeria-which-is-bigger.jpg"
+ }
+]

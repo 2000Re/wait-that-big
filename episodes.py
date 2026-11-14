@@ -122,7 +122,11 @@ def compare(c, tts, out, rng):
         return img
 
     M.render(out / "video.mp4", wav, end, frame)
+    M.save_thumb(frame(reveal - 0.6), out / "site.jpg")
     return dict(
+        site=dict(question=f"{sa} or {sb}: which is bigger?", choices=[sa, sb], answer=1,
+                  result=f"{sb} is about {times(r)}× bigger!",
+                  details=[f"{sb}: {fmt_area(area_b)}", f"{sa}: {fmt_area(area_a)}"]),
         title=f"{sa} or {sb}: which is bigger? 🌍",
         question=f"{sa} or {sb} — which one is bigger?",
         answer=f"{sb} is about {times(r)}× bigger ({fmt_area(area_b)} vs {fmt_area(area_a)}).",
@@ -273,7 +277,12 @@ def fit(c, tts, out, rng):
         return img
 
     M.render(out / "video.mp4", wav, end, frame)
+    M.save_thumb(frame(reveal - 0.6), out / "site.jpg")
     return dict(
+        site=dict(question=f"How many {plural} fit inside {sb}?", choices=choices, answer=correct,
+                  result=f"About {n} {plural}!",
+                  details=[f"{sb}: {fmt_area(area_b)}", f"{ss}: {fmt_area(area_s)}",
+                           f"{fmt_area(area_b)} ÷ {fmt_area(area_s)} ≈ {n}"]),
         title=f"How many {plural} fit in {sb}? 🌍",
         question=f"How many {plural} fit inside {sb}?",
         answer=f"About {n} (by area: {sb} {fmt_area(area_b)} ÷ {ss} {fmt_area(area_s)}).",
@@ -391,7 +400,11 @@ def overlay(c, tts, out, rng):
         return img
 
     M.render(out / "video.mp4", wav, end, frame)
+    M.save_thumb(frame(at["km"] + 0.6), out / "site.jpg")
     return dict(
+        site=dict(question=f"What if {sm} were in {region_title}?", choices=[], answer=None,
+                  result=f"{sm} would stretch from {sa} to {sbn}.",
+                  details=[f"About {km:,} km from end to end"]),
         title=f"What if {sm} were in {region_title}? 🌍",
         question=f"What if {sm} were in {region_title}?",
         answer=f"It would stretch from {sa} to {sbn} — about {km:,} km.",
