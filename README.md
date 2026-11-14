@@ -46,6 +46,16 @@ python make_short.py --tts dummy --key "fit:Australia|Japan" --history /tmp/none
 
 `--tts google` は環境変数 `GOOGLE_TTS_API_KEY`(Text-to-Speech API のキー)を使う。声は en-US-Chirp3-HD-Charon、1.1倍速。
 
+## ウェブサイト
+
+`docs/` を GitHub Pages で公開する(Settings → Pages → Deploy from a branch → `main` / `/docs`)。
+
+- ホーム: https://2000re.github.io/wait-that-big/
+- プライバシーポリシー: https://2000re.github.io/wait-that-big/privacy.html
+- 利用規約: https://2000re.github.io/wait-that-big/terms.html
+
+OAuth 同意画面の「アプリのホームページ」「プライバシーポリシー」「利用規約」に、この3つの URL を入れる。
+
 ## 自動投稿のセットアップ
 
 YouTube のチャンネルは Painted When? と同じ Google アカウント(ブランドアカウント)にある。GCP プロジェクトと GitHub のリポジトリは別にする。
