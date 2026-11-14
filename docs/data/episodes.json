@@ -17,5 +17,26 @@
    "Norway: 387,000 km²"
   ],
   "image": "img/1-norway-or-algeria-which-is-bigger.jpg"
+ },
+ {
+  "number": 2,
+  "slug": "2-how-many-uruguays-fit-inside-greenland",
+  "format": "fit",
+  "video_id": "Auy-KeHPNa4",
+  "uploaded_at": "2026-11-14T10:24:32+00:00",
+  "question": "How many Uruguays fit inside Greenland?",
+  "choices": [
+   "4",
+   "7",
+   "12"
+  ],
+  "answer": 2,
+  "result": "About 12 Uruguays!",
+  "details": [
+   "Greenland: 2.17 million km²",
+   "Uruguay: 177,000 km²",
+   "2.17 million km² ÷ 177,000 km² ≈ 12"
+  ],
+  "image": "img/2-how-many-uruguays-fit-inside-greenland.jpg"
  }
 ]
