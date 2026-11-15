@@ -42,5 +42,20 @@
     "video_id": "QHWSWFspcB8",
     "privacy": "public",
     "uploaded_at": "2026-11-15T03:24:46+00:00"
+  },
+  {
+    "number": 4,
+    "key": "compare:Finland|Iran",
+    "format": "compare",
+    "countries": [
+      "Finland",
+      "Iran"
+    ],
+    "date": "2026-11-15",
+    "title": "[4] Finland or Iran: which is bigger? 🌍",
+    "answer": "Iran is about 5× bigger (1.62 million km² vs 333,000 km²).",
+    "video_id": "l5_1vMJlKk4",
+    "privacy": "public",
+    "uploaded_at": "2026-11-15T10:24:46+00:00"
   }
 ]

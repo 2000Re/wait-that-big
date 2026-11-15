@@ -53,5 +53,24 @@
    "About 5,300 km from end to end"
   ],
   "image": "img/3-what-if-indonesia-were-in-the-middle-east.jpg"
+ },
+ {
+  "number": 4,
+  "slug": "4-finland-or-iran-which-is-bigger",
+  "format": "compare",
+  "video_id": "l5_1vMJlKk4",
+  "uploaded_at": "2026-11-15T10:24:46+00:00",
+  "question": "Finland or Iran: which is bigger?",
+  "choices": [
+   "Finland",
+   "Iran"
+  ],
+  "answer": 1,
+  "result": "Iran is about 5× bigger!",
+  "details": [
+   "Iran: 1.62 million km²",
+   "Finland: 333,000 km²"
+  ],
+  "image": "img/4-finland-or-iran-which-is-bigger.jpg"
  }
 ]
