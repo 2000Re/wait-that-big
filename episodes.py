@@ -128,6 +128,7 @@ def compare(c, tts, out, rng):
                   result=f"{sb} is about {times(r)}× bigger!",
                   details=[f"{sb}: {fmt_area(area_b)}", f"{sa}: {fmt_area(area_a)}"]),
         title=f"{sa} or {sb}: which is bigger? 🌍",
+        title_vals=dict(a=sa, b=sb),
         question=f"{sa} or {sb} — which one is bigger?",
         answer=f"{sb} is about {times(r)}× bigger ({fmt_area(area_b)} vs {fmt_area(area_a)}).",
         countries=[a, b], tags=[sa, sb], seconds=end, lines=lines)
@@ -284,6 +285,7 @@ def fit(c, tts, out, rng):
                   details=[f"{sb}: {fmt_area(area_b)}", f"{ss}: {fmt_area(area_s)}",
                            f"{fmt_area(area_b)} ÷ {fmt_area(area_s)} ≈ {n}"]),
         title=f"How many {plural} fit in {sb}? 🌍",
+        title_vals=dict(plural=plural, big=sb, small=ss),
         question=f"How many {plural} fit inside {sb}?",
         answer=f"About {n} (by area: {sb} {fmt_area(area_b)} ÷ {ss} {fmt_area(area_s)}).",
         countries=[big, small], tags=[sb, ss], seconds=end, lines=lines)
@@ -406,6 +408,7 @@ def overlay(c, tts, out, rng):
                   result=f"{sm} would stretch from {sa} to {sbn}.",
                   details=[f"About {km:,} km from end to end"]),
         title=f"What if {sm} were in {region_title}? 🌍",
+        title_vals=dict(m=sm, region=region_title),
         question=f"What if {sm} were in {region_title}?",
         answer=f"It would stretch from {sa} to {sbn} — about {km:,} km.",
         countries=[m], tags=[sm, c["region"].replace("the ", "")], seconds=end, lines=lines)

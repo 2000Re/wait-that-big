@@ -75,6 +75,7 @@ def upload(token, video_path, meta, privacy):
     body = json.dumps({
         "snippet": {
             "title": meta["title"],
+        "title_style": meta.get("title_style"),
             "description": meta["description"],
             "tags": meta["tags"],
             "categoryId": CATEGORY_EDUCATION,
@@ -159,6 +160,7 @@ def main():
         "countries": meta["countries"],
         "date": meta["date"],
         "title": meta["title"],
+        "title_style": meta.get("title_style"),
         "answer": meta["answer"],
         "video_id": video_id,
         "privacy": actual_privacy,

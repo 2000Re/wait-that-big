@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 import catalog as K
 import episodes as E
 import media as M
+import titles
 
 TZ = ZoneInfo("Asia/Tokyo")
 HASHTAGS = "#maps #geography #truesize #mapquiz #shorts"
@@ -92,13 +93,15 @@ def main():
     else:
         raise SystemExit("お題を6回選び直しても動画を作れませんでした")
 
+    title, title_style = titles.choose(c["format"], info["title_vals"], history)
     meta = {
         "number": number,
         "key": c["key"],
         "format": c["format"],
         "countries": info["countries"],
         "date": now.date().isoformat(),
-        "title": f"[{number}] {info['title']}",
+        "title": f"[{number}] {title}",
+        "title_style": title_style,
         "description": description(info, number),
         "tags": tags(info),
         "answer": info["answer"],

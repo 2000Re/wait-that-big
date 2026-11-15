@@ -20,6 +20,13 @@ YouTube チャンネル **Wait, That Big?**([@wait-that-big](https://www.youtube
 - お題は「まだ出していないもの」の中から、驚きの大きいものを中心に選ぶ。直近4本に出た国は避ける。
 - 候補はおよそ compare 118、fit 637、overlay 100(`python -c "import catalog as K; print({f: len(K.CANDIDATES[f]()) for f in K.FORMATS})"`)。
 
+## 題名
+
+毎回ちがう題名にする(`titles.py`)。形式ごとに6〜7の型を、その形式が出た回数で順に回し、過去と同じ題名と、同じ形式の前の回と同じ型は飛ばす。
+答え(どちらが大きいか・何個か・どこに届くか)は題名に書かない。例:「Is Norway really bigger than India? 🌍」、
+「Fill Australia with Japans: how many does it take? 🌍」、「Drop Chile on Europe: where does it reach? 🌍」。
+型は `upload_history.json` の `title_style` に残る(#4 までは記録なし。#1〜#4 は形式ごとの classic の題名)。
+
 ## ファイル
 
 | ファイル | 役割 |
