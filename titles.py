@@ -32,6 +32,14 @@ TITLES = {
         ("on_top", "Put {m} on top of {region}. Where does it end? 🌍"),
         ("surprise", "{m} over {region}: the true size will surprise you 🌍"),
     ],
+    "space": [
+        ("classic", "{body} or {country}: which is wider? 🌍"),
+        ("really", "Is {country} really wider than {body}? 🌍"),
+        ("vs", "{country} vs {body}: which is bigger across? 🌍"),
+        ("cover", "Could {country} cover {body_say}? 🌍"),
+        ("guess", "Guess which is wider: {body} or {country}? 🌍"),
+        ("true_size", "True size in space: {body} vs {country} 🌍"),
+    ],
 }
 
 

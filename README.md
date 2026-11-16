@@ -6,12 +6,13 @@ YouTube チャンネル **Wait, That Big?**([@wait-that-big](https://www.youtube
 
 ## 形式
 
-番号順に、次の3つをくり返す(`#1` compare、`#2` fit、`#3` overlay、`#4` compare …)。
+前の回の次の形式を出す(compare → fit → overlay → space → compare …。space は #7 から)。
 
 | 形式 | 内容 | 例 |
 |---|---|---|
 | `compare` どっちが大きい？ | 地図では同じくらいか大きく見える国を、比べる相手の上へ動かす | Greenland or Brazil |
 | `fit` 何個入る？ | 大きい国に、小さい国が面積でいくつ入るかを当てる。答えの数だけ形を並べる | How many Japans fit inside Australia? |
+| `space` 宇宙 | 月・惑星・衛星の直径と、国の東西の幅(本土)を比べる。同じ縮尺で並べ、答えで国を天体に重ねる。直径は NASA の公表値(`catalog.py` の `BODIES`)。島国は使わない | Moon or Australia: which is wider? |
 | `overlay` 重ねてみる | 細長い国などを別の地域に重ねて、端から端までどこに届くかを見せる(クイズではない) | What if Japan were in Europe? |
 
 - 数字と国名は、すべて地図データから計算する(手で書いた答えはない)。面積は WGS84 の楕円体の上で計算(pyproj)。

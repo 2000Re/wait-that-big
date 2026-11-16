@@ -4,7 +4,9 @@
 """
 import math
 
-from PIL import Image, ImageDraw
+import numpy as np
+from PIL import Image, ImageDraw, ImageFilter
+from pyproj import Proj
 from shapely.affinity import rotate
 from shapely.geometry import MultiPolygon, Polygon
 from shapely.ops import unary_union
@@ -414,4 +416,185 @@ def overlay(c, tts, out, rng):
         countries=[m], tags=[sm, c["region"].replace("the ", "")], seconds=end, lines=lines)
 
 
-RENDER = {"compare": compare, "fit": fit, "overlay": overlay}
+# ---------------------------------------------------------------- 宇宙(天体の直径と国の幅)
+
+
+def starfield(seed):
+    rng = np.random.default_rng(seed)
+    img = Image.new("RGBA", (W, H), (5, 7, 16, 255))
+    d = ImageDraw.Draw(img)
+    for _ in range(420):
+        x, y = rng.uniform(0, W), rng.uniform(0, H)
+        r = rng.choice([0.6, 0.9, 1.3, 1.8], p=[0.55, 0.25, 0.15, 0.05])
+        d.ellipse([x - r, y - r, x + r, y + r], fill=(220, 225, 255, int(rng.uniform(90, 255))))
+    return img
+
+
+def body_disk(diam_px, color, seed):
+    """手続きで描く天体(色のついた円盤・まだら・クレーター・縁の暗さ)。写真ではないので、形と大きさを見せるためのもの。"""
+    s = int(diam_px) + 4
+    rng = np.random.default_rng(seed)
+    yy, xx = np.mgrid[0:s, 0:s].astype(np.float32)
+    c = (s - 1) / 2
+    r = np.hypot(xx - c, yy - c) / (diam_px / 2)
+    base = np.zeros((s, s), np.float32)
+    for _ in range(5):                                     # 大きなまだら
+        cx, cy, rad = rng.uniform(0.2, 0.8) * s, rng.uniform(0.2, 0.8) * s, rng.uniform(0.12, 0.25) * s
+        base -= 0.07 * np.exp(-(((xx - cx) ** 2 + (yy - cy) ** 2) / (2 * rad ** 2)))
+    for _ in range(70):                                    # クレーター(左上から光)
+        cx, cy = rng.uniform(0, s), rng.uniform(0, s)
+        rad = rng.uniform(0.006, 0.035) * s * (1 if rng.random() < 0.92 else 2.0)
+        dd = np.hypot(xx - cx, yy - cy) / rad
+        lx, ly = (xx - cx) / rad, (yy - cy) / rad
+        base += np.exp(-((dd - 1) ** 2) / 0.03) * (0.035 + 0.035 * np.clip(lx + ly, -1, 1))
+        base += np.exp(-(dd ** 2) / 0.5) * (-0.04 - 0.03 * np.clip(-(lx + ly), -1, 1))
+    grain = np.kron(rng.normal(0, 1, (s // 4 + 1, s // 4 + 1)), np.ones((4, 4)))[:s, :s].astype(np.float32)
+    base += 0.035 * grain
+    shade = np.sqrt(np.clip(1 - r ** 2, 0, 1)) ** 0.35
+    v = np.clip(1 + base, 0.3, 1.3) * (0.55 + 0.45 * shade)
+    rgb = np.clip(np.stack([v * color[0], v * color[1], v * color[2]], -1), 0, 255).astype(np.uint8)
+    alpha = (np.clip((1 - r) * diam_px / 2 + 0.5, 0, 1) * 255).astype(np.uint8)
+    img = Image.fromarray(np.dstack([rgb, alpha]), "RGBA")
+    out = Image.new("RGBA", (s + 80, s + 80), (0, 0, 0, 0))
+    ImageDraw.Draw(out).ellipse([40, 40, s + 40, s + 40], fill=color + (60,))
+    out = out.filter(ImageFilter.GaussianBlur(18))
+    out.alpha_composite(img, (40, 40))
+    return out
+
+
+def round_km(x):
+    return int(round(x / 10) * 10) if x < 1000 else int(round(x / 100) * 100)
+
+
+def space(c, tts, out, rng):
+    b, n = c["body"], c["country"]
+    bsay, desc, diam, color = K.BODIES[b]
+    bs = b.replace("The ", "the ") if b.startswith("The ") else b
+    bs_label = b.replace("The ", "") if b == "The Moon" else b
+    cs, csay = K.short(n), K.spoken(n)
+    width, height = K.country_width(n)
+    bk, ck = round_km(diam), round_km(width)
+    if bk == ck:
+        bk, ck = int(round(diam / 10) * 10), int(round(width / 10) * 10)
+    body_wins = diam > width
+    # 国の形(正距方位図法、km)。本土の東西の中心と、全体の南北の中心を原点にする
+    cen = geo.centroid(n)
+    P = Proj(f"+proj=aeqd +lat_0={cen[1]} +lon_0={cen[0]} +units=km")
+    rings = [[P(lo, la) for lo, la in r] for r in geo.body(n)]
+    main = max(geo.body(n), key=geo.ring_area_km2)
+    mx = [P(lo, la)[0] for lo, la in main]
+    ys = [y for r in rings for _, y in r]
+    xs_all = [x for r in rings for x, _ in r]
+    ox, oy = (max(mx) + min(mx)) / 2, (max(ys) + min(ys)) / 2
+    rings = [[(x - ox, y - oy) for x, y in r] for r in rings]
+    full_w, full_h = max(xs_all) - min(xs_all), max(ys) - min(ys)
+    k = min(560 / diam, 980 / max(width, full_w), 500 / full_h)   # 1 km あたりの画素(天体と国で同じ)
+    R = diam * k / 2
+    body_c = (W / 2, 470 + 120 + R)                 # 上に天体の札の分を空ける
+    ctry_c0 = (W / 2, max(body_c[1] + R + 90 + full_h * k / 2 + 50, 1420))
+
+    lines = {
+        "q": f"{K.cap(bs)} or {csay}. Which one is wider?",
+        "lock": "Lock in your answer!",
+        "move": f"Let's put {csay} on {bs}.",
+        "ans": f"{K.cap(bs if body_wins else csay)} is wider!",
+        "nums": f"{K.cap(bs)}, {desc}, is about {bk:,} kilometers across. {K.cap(csay)} is about {ck:,} kilometers wide.",
+        "outro": "What should we compare next?",
+    }
+    clips, dur = M.say_all(tts, lines)
+    at = {"q": 0.08}
+    at["lock"] = at["q"] + dur["q"] + 0.4
+    reveal = at["lock"] + dur["lock"] + 1.8
+    at["move"] = reveal + 0.1
+    move = (at["move"] + dur["move"] * 0.5, at["move"] + dur["move"] + 0.9)
+    at["ans"] = move[1] + 0.2
+    at["nums"] = at["ans"] + dur["ans"] + 0.4
+    at["outro"] = at["nums"] + dur["nums"] + 0.6
+    end = at["outro"] + dur["outro"] + 1.0
+    effects = [(M.sfx_whoosh(), 0.0), *M.countdown_ticks(reveal), (M.sfx_whoosh(), move[0]),
+               (M.sfx_ding(), at["ans"]), (M.sfx_pop(), at["nums"])]
+    wav = out / "audio.wav"
+    M.write_audio(wav, end, clips, at, effects)
+
+    bg = starfield(rng.randrange(1 << 30))
+    disk = body_disk(2 * R, color, rng.randrange(1 << 30))
+    kicker, title, pill_y, timer_y = header("Which one is wider?", kicker="TRUE SIZE · SPACE")
+    pills = [M.pill(bs_label, color, w=460, dot=True), M.pill(cs, M.MOVER, w=460, dot=True)]
+    win = 0 if body_wins else 1
+    right = M.pill([bs_label, cs][win], [color, M.MOVER][win], w=460, glow=True, dot=True)
+    f_lab, f_sub = M.font(M.SANS_BOLD, 40), M.font(M.SANS, 26)
+    credit = M.text_layer(["Sizes: NASA · Map: Natural Earth (public domain) · same scale"], M.font(M.SANS, 22),
+                          (170, 180, 200, 230), shadow=160)
+
+    def measure(d, cx, y, km_, col, a, label):
+        half = km_ * k / 2
+        ca = col + (int(255 * a),)
+        d.line([cx - half, y, cx + half, y], fill=ca, width=5)
+        for x in (cx - half, cx + half):
+            d.line([x, y - 16, x, y + 16], fill=ca, width=5)
+        tw = d.textlength(label, font=f_lab) / 2 + 18
+        d.rounded_rectangle([cx - tw, y - 64, cx + tw, y - 14], radius=14, fill=(8, 12, 24, int(220 * a)))
+        d.text((cx, y - 39), label, font=f_lab, fill=(255, 255, 255, int(255 * a)), anchor="mm")
+
+    def tag(d, x, y, name, sub=None):
+        tw = max(d.textlength(name, font=f_lab), d.textlength(sub or "", font=f_sub)) / 2 + 18
+        hgt = 52 if not sub else 84
+        d.rounded_rectangle([x - tw, y - 26, x + tw, y - 26 + hgt], radius=14, fill=(8, 12, 24, 210))
+        d.text((x, y), name, font=f_lab, fill=(255, 255, 255, 255), anchor="mm")
+        if sub:
+            d.text((x, y + 34), sub, font=f_sub, fill=(200, 205, 220, 255), anchor="mm")
+
+    def frame(t):
+        img = bg.copy()
+        img.alpha_composite(disk, (int(body_c[0] - disk.width / 2), int(body_c[1] - disk.height / 2)))
+        u = M.ease((t - move[0]) / (move[1] - move[0]))
+        cx = ctry_c0[0] + (body_c[0] - ctry_c0[0]) * u
+        cy = ctry_c0[1] + (body_c[1] - ctry_c0[1]) * u
+        layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(layer)
+        for r in rings:
+            d.polygon([(cx + x * k, cy - y * k) for x, y in r], fill=M.MOVER + (int(255 - 70 * u),),
+                      outline=(255, 230, 200, 255), width=3)
+        img.alpha_composite(layer)
+        d = ImageDraw.Draw(img)
+        if u == 0:
+            tag(d, body_c[0], body_c[1] - R - 74, bs_label, desc)
+            tag(d, ctry_c0[0], ctry_c0[1] - full_h * k / 2 - 45, cs)
+        rn = M.ease((t - at["nums"]) / 0.4)
+        if rn > 0:
+            y0 = max(body_c[1] + R, body_c[1] + full_h * k / 2) + 110
+            measure(d, body_c[0], y0, diam, color, rn, f"{bs_label}  {bk:,} km")
+            measure(d, body_c[0], y0 + 120, width, M.MOVER, rn, f"{cs}  {ck:,} km")
+        sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(sh).rectangle([0, 0, W, M.SHADE_TOP], fill=(5, 7, 16, 225))
+        img.alpha_composite(sh)
+        img.alpha_composite(kicker, (0, 110))
+        img.alpha_composite(title, (0, TITLE_Y))
+        rr = M.ease((t - at["ans"]) / 0.3)
+        for i, pl in enumerate(pills):
+            px = 60 + i * 500
+            if i == win and rr > 0:
+                img.alpha_composite(M.with_alpha(pl, 1 - rr), (px, pill_y))
+                img.alpha_composite(M.with_alpha(right, rr), (px, pill_y))
+            else:
+                img.alpha_composite(M.with_alpha(pl, 1 - 0.6 * rr), (px, pill_y))
+        M.timer_bar(img, t, 0.0, reveal, y=timer_y)
+        img.alpha_composite(credit, (0, 1860))
+        return img
+
+    M.render(out / "video.mp4", wav, end, frame)
+    M.save_thumb(frame(reveal - 0.6), out / "site.jpg")
+    winner = bs_label if body_wins else cs
+    return dict(
+        site=dict(question=f"{bs_label} or {cs}: which is wider?", choices=[bs_label, cs], answer=win,
+                  result=f"{K.cap(winner)} is wider!",
+                  details=[f"{bs_label} ({desc}): about {bk:,} km across",
+                           f"{cs}: about {ck:,} km wide (east to west, mainland)"]),
+        title=f"{bs_label} or {cs}: which is wider? 🌍",
+        title_vals=dict(body=bs_label, country=cs, body_say=bs),
+        question=f"{bs_label} or {cs} — which one is wider?",
+        answer=f"{K.cap(winner)} is wider: {bs_label} is about {bk:,} km across, {cs} about {ck:,} km wide.",
+        countries=[n], tags=[bs_label, cs, "space", "solar system"], seconds=end, lines=lines)
+
+
+RENDER = {"compare": compare, "fit": fit, "overlay": overlay, "space": space}

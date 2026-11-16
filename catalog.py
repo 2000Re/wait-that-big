@@ -4,13 +4,15 @@
   compare  どっちが大きい？   地図では同じくらいに見える2国。片方を地球の上で動かして、本当の大きさを見せる
   fit      何個入る？         大きい国に、小さい国が(面積で)いくつ入るか。答えの数だけ形を並べる
   overlay  重ねてみる         細長い国などを別の地域に重ねて、端から端までどこに届くかを見せる(クイズではない)
+  space    宇宙               月・惑星・衛星の直径と、国の東西の幅を比べる(「月とオーストラリア、幅が広いのは？」)
 """
 import math
+from functools import lru_cache
 import random
 
 import geo
 
-FORMATS = ["compare", "fit", "overlay"]
+FORMATS = ["compare", "fit", "overlay", "space"]
 
 # 主役にする国: データ上の名前 → (短い名前[題名・ボタン], 読み上げ[冠詞つき], 複数形[何個入る？で使う。不自然なら None])
 # 国境に争いのある国・地域(台湾、イスラエル、モロッコ、西サハラ、コソボなど)は主役にしない
@@ -174,11 +176,75 @@ def overlay_candidates():
     return out
 
 
-CANDIDATES = {"compare": compare_candidates, "fit": fit_candidates, "overlay": overlay_candidates}
+# 天体: 名前 → (読み上げ, ひとこと, 平均直径 km, 色)。直径は NASA の公表値(Planetary Fact Sheet など)
+BODIES = {
+    "The Moon": ("the Moon", "Earth's moon", 3474.8, (175, 175, 172)),
+    "Mercury": ("Mercury", "the smallest planet", 4879.4, (160, 150, 140)),
+    "Mars": ("Mars", "the Red Planet", 6779.0, (205, 115, 75)),
+    "Io": ("Io", "a moon of Jupiter", 3643.2, (225, 205, 120)),
+    "Europa": ("Europa", "a moon of Jupiter", 3121.6, (215, 205, 185)),
+    "Ganymede": ("Ganymede", "Jupiter's largest moon", 5268.2, (165, 155, 145)),
+    "Callisto": ("Callisto", "a moon of Jupiter", 4820.6, (125, 115, 105)),
+    "Titan": ("Titan", "Saturn's largest moon", 5149.5, (215, 165, 85)),
+    "Triton": ("Triton", "Neptune's largest moon", 2706.8, (205, 195, 195)),
+    "Pluto": ("Pluto", "a dwarf planet", 2376.6, (205, 175, 145)),
+    "Eris": ("Eris", "a dwarf planet", 2326.0, (220, 220, 222)),
+    "Charon": ("Charon", "Pluto's largest moon", 1212.0, (150, 150, 156)),
+    "Ceres": ("Ceres", "a dwarf planet in the asteroid belt", 939.4, (145, 145, 145)),
+    "Titania": ("Titania", "Uranus's largest moon", 1577.8, (172, 167, 162)),
+    "Rhea": ("Rhea", "a moon of Saturn", 1527.6, (200, 200, 200)),
+    "Vesta": ("Vesta", "a giant asteroid", 525.4, (145, 140, 135)),
+    "Enceladus": ("Enceladus", "an icy moon of Saturn", 504.2, (232, 238, 244)),
+    "Mimas": ("Mimas", "a moon of Saturn", 396.4, (190, 190, 192)),
+}
+
+
+FAMOUS_BODIES = {"The Moon", "Mars", "Pluto", "Mercury"}
+
+
+@lru_cache(maxsize=None)
+def country_width(n):
+    """本土(いちばん大きい島)の東西の幅と南北の高さ(km)。正距方位図法で測る。"""
+    from pyproj import Proj
+    c = geo.centroid(n)
+    P = Proj(f"+proj=aeqd +lat_0={c[1]} +lon_0={c[0]} +units=km")
+    main = max(geo.body(n), key=geo.ring_area_km2)
+    pts = [P(lo, la) for lo, la in main]
+    xs, ys = [x for x, _ in pts], [y for _, y in pts]
+    return max(xs) - min(xs), max(ys) - min(ys)
+
+
+def space_candidates():
+    """(天体, 国, 得点)。天体の直径と国の幅が近いほど(どちらとも言えそうなほど)おもしろい。"""
+    out = []
+    for b, (_, _, d, _) in BODIES.items():
+        for n in C:
+            if n == "Greenland" or geo.body_share(n) < 0.9:
+                continue
+            # 島国(インドネシア、日本など)は、いちばん大きい島の幅が国の幅にならないので使わない
+            if geo.ring_area_km2(max(geo.body(n), key=geo.ring_area_km2)) < 0.75 * geo.body_area_km2(n):
+                continue
+            w, h = country_width(n)
+            r = w / d
+            if not 0.72 <= r <= 1.4 or abs(r - 1) < 0.05 or h > 1.35 * w:
+                continue
+            out.append(dict(format="space", key=f"space:{b}|{n}", body=b, country=n,
+                            score=(1 / max(0.08, abs(math.log(r)))) * (1.6 if b in FAMOUS_BODIES else 1.0)))
+    return out
+
+
+CANDIDATES = {"compare": compare_candidates, "fit": fit_candidates, "overlay": overlay_candidates,
+              "space": space_candidates}
 
 
 def countries_of(c):
-    return {c.get(k) for k in ("a", "b", "big", "small", "mover")} - {None}
+    return {c.get(k) for k in ("a", "b", "big", "small", "mover", "country", "body")} - {None}
+
+
+def next_format(history):
+    """前の回の次の形式(compare → fit → overlay → space → compare …)。"""
+    last = next((h.get("format") for h in reversed(history) if h.get("format") in FORMATS), None)
+    return FORMATS[(FORMATS.index(last) + 1) % len(FORMATS)] if last else FORMATS[0]
 
 
 def choose(fmt, history, seed, top=40, recent=4):

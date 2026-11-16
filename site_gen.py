@@ -24,7 +24,7 @@ DATA = DOCS / "data" / "episodes.json"
 SITE = "https://2000re.github.io/wait-that-big"
 CHANNEL = "https://www.youtube.com/@wait-that-big"
 NAME = "Wait, That Big?"
-KIND = {"compare": "Which is bigger?", "fit": "How many fit?", "overlay": "What if…?"}
+KIND = {"compare": "Which is bigger?", "fit": "How many fit?", "overlay": "What if…?", "space": "Space: which is wider?"}
 ABOUT = ("Flat (Mercator) maps stretch land near the poles. In this video the shape is moved across the globe at its "
          "true size, and areas are calculated on the Earth's surface (WGS84), not on the flat map. "
          'Map data: <a href="https://www.naturalearthdata.com/">Natural Earth</a> (public domain).')

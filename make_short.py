@@ -22,7 +22,15 @@ HASHTAGS = "#maps #geography #truesize #mapquiz #shorts"
 SITE = "https://2000re.github.io/wait-that-big"
 
 
-def description(info, number):
+SPACE_NOTE = ("The planet or moon and the country are drawn at the same scale. Diameters are NASA's published mean "
+              "diameters; the country's width is measured east to west across its mainland on the Earth's surface "
+              "(WGS84). The planet or moon is an illustration, not a photo.")
+MAP_NOTE = ("Flat (Mercator) maps stretch land near the poles, so countries far from the equator look much bigger than "
+            "they really are. Every shape in this video is moved across the globe at its true size, and areas are "
+            "calculated on the Earth's surface (WGS84), not on the flat map.")
+
+
+def description(info, number, fmt=None):
     return "\n".join([
         info["question"],
         "",
@@ -30,13 +38,11 @@ def description(info, number):
         "",
         f"Answer: {info['answer']}",
         "",
-        "Flat (Mercator) maps stretch land near the poles, so countries far from the equator look much bigger than "
-        "they really are. Every shape in this video is moved across the globe at its true size, and areas are "
-        "calculated on the Earth's surface (WGS84), not on the flat map.",
+        SPACE_NOTE if fmt == "space" else MAP_NOTE,
         "",
         f"More true-size quizzes: {SITE}/",
         "",
-        "Map data: Natural Earth (public domain).",
+        "Map data: Natural Earth (public domain)." + (" Sizes: NASA." if fmt == "space" else ""),
         "",
         HASHTAGS,
     ])
@@ -70,7 +76,7 @@ def main():
     history = json.loads(hp.read_text()) if hp.exists() else []
     number = max([h["number"] for h in history], default=0) + 1
     now = datetime.now(TZ)
-    fmt = K.FORMATS[(number - 1) % len(K.FORMATS)] if args.format == "auto" else args.format
+    fmt = K.next_format(history) if args.format == "auto" else args.format
     rng = random.Random(f"{now.date()}:{number}")
     tts = M.make_tts(args.tts)
 
@@ -102,7 +108,7 @@ def main():
         "date": now.date().isoformat(),
         "title": f"[{number}] {title}",
         "title_style": title_style,
-        "description": description(info, number),
+        "description": description(info, number, c["format"]),
         "tags": tags(info),
         "answer": info["answer"],
         "video": "video.mp4",
