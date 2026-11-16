@@ -72,5 +72,26 @@
    "Finland: 333,000 km²"
   ],
   "image": "img/4-finland-or-iran-which-is-bigger.jpg"
+ },
+ {
+  "number": 5,
+  "slug": "5-how-many-swedens-fit-inside-libya",
+  "format": "fit",
+  "video_id": "HUN53hfZUNE",
+  "uploaded_at": "2026-11-16T03:24:30+00:00",
+  "question": "How many Swedens fit inside Libya?",
+  "choices": [
+   "2",
+   "4",
+   "6"
+  ],
+  "answer": 1,
+  "result": "About 4 Swedens!",
+  "details": [
+   "Libya: 1.62 million km²",
+   "Sweden: 446,000 km²",
+   "1.62 million km² ÷ 446,000 km² ≈ 4"
+  ],
+  "image": "img/5-how-many-swedens-fit-inside-libya.jpg"
  }
 ]
