@@ -33,6 +33,7 @@ YouTube チャンネル **Wait, That Big?**([@wait-that-big](https://www.youtube
 
 | ファイル | 役割 |
 |---|---|
+| `longform.py` | 通常動画(横長)「True Size Challenge」を作り、投稿する(下の「通常動画」) |
 | `make_short.py` | 次のお題を選び、動画(`out/video.mp4`)と `out/meta.json` を作る |
 | `catalog.py` | 国の一覧、お題の候補、選び方 |
 | `episodes.py` | 3つの形式の画面と声 |
@@ -55,6 +56,36 @@ python make_short.py --tts dummy --key "fit:Australia|Japan" --history /tmp/none
 ```
 
 `--tts google` は環境変数 `GOOGLE_TTS_API_KEY`(Text-to-Speech API のキー)を使う。声は en-US-Chirp3-HD-Charon、1.1倍速。
+
+## 通常動画「True Size Challenge」(`longform.py`、週1本)
+
+横長(1920x1080)の通常動画。12問を、「どっちが大きい？」(compare)と「何個入る？」(fit)を交互に出す(約3分40秒)。
+
+- 流れ: 導入「Welcome to the True Size Challenge! 12 rounds, 5 seconds each. Keep score!」→ 各問(問題を読む →
+  5秒のカウントダウン → 国を動かす/形を並べる → 答えと面積)→ 最後に「How many did you get right?」と点数の目安
+  (10〜12: Map master / 6〜9: Globe trotter / 0〜5: Mercator fooled you)
+- 画面: 左に回の番号・問題・選択肢・カウントダウン・答え、右に地図。地図の計算・国の動かし方・形の並べ方・声は Shorts と同じ部品
+- お題: Shorts と過去の通常動画で出していないもの(国の組み合わせ)から、得点の高いものを中心に選ぶ。
+  **直近14日の Shorts に出た国は使わない**(`RECENT_DAYS`。比べる相手・overlay の端の国も含む。候補が足りない問だけゆるめる)。
+  1本の中で同じ国は2回出さない
+- 説明欄: 各問の開始時刻のチャプター、答えの一覧(ネタバレ注意と書く)、出典
+- サムネイル(1280x720)も作り、`thumbnails.set` で設定する。チャンネルの電話番号確認が済んでいないと 403 になるので、
+  そのときは警告だけ出して投稿は続ける(YouTube Studio で手で設定する)
+- 投稿の記録は `longform_history.json`(Shorts の `upload_history.json` とは別。番号も別)
+
+自動化(`.github/workflows/longform.yml`):
+
+- 毎週土曜 19:13 JST ごろ、GitHub の定期実行で動く。**リポジトリ変数 `LONGFORM_AUTO` が `true` のときだけ**
+  (最初は Actions → longform → Run workflow で手動で試し、良ければ `true` にする)
+- 手動実行の公開設定は既定で `unlisted`。`dry_run` にすると、投稿せずに Artifacts から動画だけ確認できる
+- 失敗したら Issue(ラベル `longform-failure`、トークン失効なら `token-invalid`)
+- 生成に約7分。YouTube API の割り当ては、動画1本 1,600 + サムネイル 50
+
+手元で試す:
+
+```bash
+python longform.py --tts dummy --rounds 2 --history /dev/null --out out_long
+```
 
 ## ウェブサイト
 
