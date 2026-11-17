@@ -103,5 +103,21 @@
     "video_id": "JqzVSUUZGdQ",
     "privacy": "public",
     "uploaded_at": "2026-11-17T03:25:08+00:00"
+  },
+  {
+    "number": 8,
+    "key": "compare:Norway|Venezuela",
+    "format": "compare",
+    "countries": [
+      "Norway",
+      "Venezuela"
+    ],
+    "date": "2026-11-17",
+    "title": "[8] Norway vs Venezuela: which is actually bigger? 🌍",
+    "title_style": "compare_actually",
+    "answer": "Venezuela is about 2.4× bigger (910,000 km² vs 387,000 km²).",
+    "video_id": "aNsHLSpZX4A",
+    "privacy": "public",
+    "uploaded_at": "2026-11-17T10:24:59+00:00"
   }
 ]

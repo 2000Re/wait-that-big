@@ -127,5 +127,24 @@
    "Austria: about 570 km wide (east to west, mainland)"
   ],
   "image": "img/7-vesta-or-austria-which-is-wider.jpg"
+ },
+ {
+  "number": 8,
+  "slug": "8-norway-or-venezuela-which-is-bigger",
+  "format": "compare",
+  "video_id": "aNsHLSpZX4A",
+  "uploaded_at": "2026-11-17T10:24:59+00:00",
+  "question": "Norway or Venezuela: which is bigger?",
+  "choices": [
+   "Norway",
+   "Venezuela"
+  ],
+  "answer": 1,
+  "result": "Venezuela is about 2.4× bigger!",
+  "details": [
+   "Venezuela: 910,000 km²",
+   "Norway: 387,000 km²"
+  ],
+  "image": "img/8-norway-or-venezuela-which-is-bigger.jpg"
  }
 ]
