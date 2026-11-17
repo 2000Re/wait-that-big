@@ -383,23 +383,50 @@ def outro(tts, total):
 # ---------------------------------------------------------------- 問題の選び方
 
 
-def pick(n_rounds, shorts_history, long_history, rng):
-    """compare と fit を交互に。Shorts と過去の通常動画で出したお題、この動画の中で同じ国が2回出るものは避ける。"""
+RECENT_DAYS = 14        # この日数のうちに Shorts に出た国は、通常動画では使わない(足りなければ使う)
+
+
+def recent_short_countries(shorts_history, now=None, days=RECENT_DAYS):
+    """直近 days 日の Shorts に出てきた国・地域(比べる相手、overlay の端の国も含む)。"""
+    now = now or datetime.now(timezone.utc)
+    out = set()
+    for h in shorts_history:
+        try:
+            t = datetime.fromisoformat(h["uploaded_at"])
+        except (KeyError, ValueError):
+            continue
+        if (now - t).total_seconds() <= days * 86400:
+            out |= K.shown_in(h)
+    return out
+
+
+def pick(n_rounds, shorts_history, long_history, rng, now=None):
+    """compare と fit を交互に。次のものは避ける:
+    - Shorts と過去の通常動画で出したお題(国の組み合わせ)
+    - 直近 RECENT_DAYS 日の Shorts に出た国(候補が足りなくなった問だけ、この条件をゆるめる)
+    - この動画の中で、すでに出した国"""
     used = {h["key"] for h in shorts_history} | {k for h in long_history for k in h.get("keys", [])}
+    recent = recent_short_countries(shorts_history, now)
     pools = {}
     for fmt in ("compare", "fit"):
         cs = [c for c in K.CANDIDATES[fmt]() if c["key"] not in used]
         cs.sort(key=lambda c: -c["score"])
-        pools[fmt] = cs[:200]
-    chosen, seen = [], set()
+        pools[fmt] = cs
+    chosen, seen, relaxed = [], set(), 0
     for i in range(n_rounds):
         fmt = "compare" if i % 2 == 0 else "fit"
-        pool = [c for c in pools[fmt] if not (K.countries_of(c) & seen) and c not in chosen]
+        fresh = [c for c in pools[fmt] if not (K.countries_of(c) & seen) and c not in chosen]
+        pool = [c for c in fresh if not (K.countries_of(c) & recent)]
+        if not pool:
+            pool, relaxed = fresh, relaxed + 1
         if not pool:
             raise SystemExit(f"{fmt} のお題が足りません")
-        c = rng.choices(pool[:60], weights=[c["score"] for c in pool[:60]])[0]
+        top = pool[:60]
+        c = rng.choices(top, weights=[c["score"] for c in top])[0]
         chosen.append(c)
         seen |= K.countries_of(c)
+    print(f"直近{RECENT_DAYS}日の Shorts に出た国: {len(recent)}"
+          + (f"(候補が足りず、{relaxed}問はこの条件をゆるめた)" if relaxed else ""), flush=True)
     return chosen
 
 
