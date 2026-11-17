@@ -238,7 +238,16 @@ CANDIDATES = {"compare": compare_candidates, "fit": fit_candidates, "overlay": o
 
 
 def countries_of(c):
-    return {c.get(k) for k in ("a", "b", "big", "small", "mover", "country", "body")} - {None}
+    """お題に出てくる国・天体・地域(overlay の行き先)。"""
+    return {c.get(k) for k in ("a", "b", "big", "small", "mover", "country", "body", "region")} - {None}
+
+
+def shown_in(h):
+    """投稿記録の1本に出てきた国・天体・地域。countries(overlay では端の2国も)と、key に書かれた名前。"""
+    names = set(h.get("countries", []))
+    if ":" in h.get("key", ""):
+        names |= set(h["key"].split(":", 1)[1].split("|"))
+    return names
 
 
 def next_format(history):
@@ -248,11 +257,12 @@ def next_format(history):
 
 
 def choose(fmt, history, seed, top=40, recent=4):
-    """まだ出していないお題から、得点の高いものを中心に選ぶ。直近 recent 本の主役の国は避ける。"""
+    """まだ出していないお題から、得点の高いものを中心に選ぶ。
+    直近 recent 本に出てきた国・天体・地域(比べる相手、overlay の行き先と端の国も含む)は避ける。"""
     used = {h["key"] for h in history}
     avoid = set()
     for h in history[-recent:]:
-        avoid |= set(h.get("countries", []))
+        avoid |= shown_in(h)
     cands = [c for c in CANDIDATES[fmt]() if c["key"] not in used]
     cands.sort(key=lambda c: -c["score"])
     fresh = [c for c in cands if not countries_of(c) & avoid] or cands
