@@ -413,7 +413,8 @@ def overlay(c, tts, out, rng):
         title_vals=dict(m=sm, region=region_title),
         question=f"What if {sm} were in {region_title}?",
         answer=f"It would stretch from {sa} to {sbn} — about {km:,} km.",
-        countries=[m], tags=[sm, c["region"].replace("the ", "")], seconds=end, lines=lines)
+        # 端の2国も記録して、次の回から避ける(例: 「Iran to Libya」のあとに Iran や Libya の回が続かないように)
+        countries=list(dict.fromkeys([m, na, nb])), tags=[sm, c["region"].replace("the ", "")], seconds=end, lines=lines)
 
 
 # ---------------------------------------------------------------- 宇宙(天体の直径と国の幅)
