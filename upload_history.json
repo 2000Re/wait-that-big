@@ -88,5 +88,20 @@
     "video_id": "jtIlgyQUy74",
     "privacy": "public",
     "uploaded_at": "2026-11-16T10:25:01+00:00"
+  },
+  {
+    "number": 7,
+    "key": "space:Vesta|Austria",
+    "format": "space",
+    "countries": [
+      "Austria"
+    ],
+    "date": "2026-11-17",
+    "title": "[7] Vesta or Austria: which is wider? 🌍",
+    "title_style": "space_classic",
+    "answer": "Austria is wider: Vesta is about 530 km across, Austria about 570 km wide.",
+    "video_id": "JqzVSUUZGdQ",
+    "privacy": "public",
+    "uploaded_at": "2026-11-17T03:25:08+00:00"
   }
 ]

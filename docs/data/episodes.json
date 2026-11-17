@@ -108,5 +108,24 @@
    "About 4,100 km from end to end"
   ],
   "image": "img/6-what-if-australia-were-in-the-middle-east.jpg"
+ },
+ {
+  "number": 7,
+  "slug": "7-vesta-or-austria-which-is-wider",
+  "format": "space",
+  "video_id": "JqzVSUUZGdQ",
+  "uploaded_at": "2026-11-17T03:25:08+00:00",
+  "question": "Vesta or Austria: which is wider?",
+  "choices": [
+   "Vesta",
+   "Austria"
+  ],
+  "answer": 1,
+  "result": "Austria is wider!",
+  "details": [
+   "Vesta (a giant asteroid): about 530 km across",
+   "Austria: about 570 km wide (east to west, mainland)"
+  ],
+  "image": "img/7-vesta-or-austria-which-is-wider.jpg"
  }
 ]

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vesta or Austria: which is wider? — Wait, That Big? #7</title>
+<meta name="description" content="True-size map quiz #7: Vesta or Austria: which is wider? Choices: Vesta / Austria. Answer inside.">
+<link rel="canonical" href="https://2000re.github.io/wait-that-big/v/7-vesta-or-austria-which-is-wider/">
+<link rel="icon" href="../../icon.png">
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header><div class="bar">
+  <img src="../../icon.png" alt="">
+  <a class="name" href="../../">Wait, That Big?</a>
+  <nav><a href="../../v/">All videos</a><a href="../../privacy.html">Privacy</a><a href="../../terms.html">Terms</a></nav>
+</div></header>
+<main>
+  <p class="muted">#7 · Space: which is wider?</p>
+  <h1>Vesta or Austria: which is wider?</h1>
+  <div class="quiz-layout">
+    <div class="short">
+      <iframe src="https://www.youtube-nocookie.com/embed/JqzVSUUZGdQ" title="Wait, That Big? #7"
+        loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <div class="quiz">
+      <p>Make your guess, then check the answer.</p>
+      <div class="choices" data-answer="1">
+    <button type="button" class="choice" data-i="0">Vesta</button>
+    <button type="button" class="choice" data-i="1">Austria</button>
+      </div>
+      <button type="button" class="reveal">Show the answer</button>
+      <div class="answer" hidden>
+        <h2>Austria is wider!</h2>
+        <ul class="facts"><li>Vesta (a giant asteroid): about 530 km across</li><li>Austria: about 570 km wide (east to west, mainland)</li></ul>
+      </div>
+      <p class="muted credit">Flat (Mercator) maps stretch land near the poles. In this video the shape is moved across the globe at its true size, and areas are calculated on the Earth's surface (WGS84), not on the flat map. Map data: <a href="https://www.naturalearthdata.com/">Natural Earth</a> (public domain).</p>
+    </div>
+  </div>
+  <p class="pager"><a href="../6-what-if-australia-were-in-the-middle-east/">← #6</a> · <a href="../">All videos</a></p>
+  <p><a href="https://www.youtube.com/@wait-that-big">New videos on YouTube: @wait-that-big</a></p>
+  <script>
+  (function () {
+    var box = document.querySelector(".choices"), ans = +box.dataset.answer;
+    var panel = document.querySelector(".answer"), btn = document.querySelector(".reveal");
+    function reveal(picked) {
+      box.querySelectorAll(".choice").forEach(function (b) {
+        var i = +b.dataset.i;
+        b.disabled = true;
+        if (i === ans) b.classList.add("right");
+        else if (i === picked) b.classList.add("wrong");
+      });
+      panel.hidden = false; btn.hidden = true;
+    }
+    box.addEventListener("click", function (ev) {
+      var b = ev.target.closest(".choice"); if (b) reveal(+b.dataset.i);
+    });
+    btn.addEventListener("click", function () { reveal(-1); });
+  })();
+  </script>
+</main>
+<footer><div class="bar">© 2026 Wait, That Big? · <a href="../../privacy.html">Privacy Policy</a> · <a href="../../terms.html">Terms of Service</a></div></footer>
+</body>
+</html>
