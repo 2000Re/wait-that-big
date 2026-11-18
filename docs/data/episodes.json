@@ -146,5 +146,26 @@
    "Norway: 387,000 km²"
   ],
   "image": "img/8-norway-or-venezuela-which-is-bigger.jpg"
+ },
+ {
+  "number": 9,
+  "slug": "9-how-many-cambodias-fit-inside-greenland",
+  "format": "fit",
+  "video_id": "_qn2T48a3Ro",
+  "uploaded_at": "2026-11-18T03:24:55+00:00",
+  "question": "How many Cambodias fit inside Greenland?",
+  "choices": [
+   "6",
+   "12",
+   "22"
+  ],
+  "answer": 1,
+  "result": "About 12 Cambodias!",
+  "details": [
+   "Greenland: 2.17 million km²",
+   "Cambodia: 181,000 km²",
+   "2.17 million km² ÷ 181,000 km² ≈ 12"
+  ],
+  "image": "img/9-how-many-cambodias-fit-inside-greenland.jpg"
  }
 ]
