@@ -26,20 +26,30 @@ SITE = "https://2000re.github.io/wait-that-big"
 SPACE_NOTE = ("The planet or moon and the country are drawn at the same scale. Diameters are NASA's published mean "
               "diameters; the country's width is measured east to west across its mainland on the Earth's surface "
               "(WGS84). The planet or moon is an illustration, not a photo.")
-MAP_NOTE = ("Flat (Mercator) maps stretch land near the poles, so countries far from the equator look much bigger than "
-            "they really are. Every shape in this video is moved across the globe at its true size, and areas are "
-            "calculated on the Earth's surface (WGS84), not on the flat map.")
+MAP_NOTES = [
+    ("Flat (Mercator) maps stretch land near the poles, so countries far from the equator look much bigger than "
+     "they really are. Every shape in this video is moved across the globe at its true size, and areas are "
+     "calculated on the Earth's surface (WGS84), not on the flat map."),
+    ("Why do the sizes look wrong? Most world maps use the Mercator projection, which stretches everything near the "
+     "poles. Here each country is moved across the globe without changing its real size, and every area is measured "
+     "on the Earth's surface (WGS84)."),
+    ("The world map you grew up with exaggerates countries near the poles. In this video the shapes are shifted over "
+     "the globe at their true size, so you can compare them fairly. Areas come from the Earth's surface (WGS84), "
+     "not from the flat map."),
+]
+LEADS = ["Guess before the reveal! 👀", "Make your guess before the answer! 🌍", "Pause and guess first! 🤔",
+         "What's your guess? Watch to the end! 👀"]
 
 
 def description(info, number, fmt=None):
     return "\n".join([
         info["question"],
         "",
-        "Guess before the reveal! 👀",
+        LEADS[number % len(LEADS)],
         "",
         f"Answer: {info['answer']}",
         "",
-        SPACE_NOTE if fmt == "space" else MAP_NOTE,
+        SPACE_NOTE if fmt == "space" else MAP_NOTES[number % len(MAP_NOTES)],
         "",
         f"More true-size quizzes: {SITE}/",
         "",
@@ -90,6 +100,7 @@ def main():
             if c is None:
                 raise SystemExit(f"{fmt} の出せるお題がもうありません")
         print("お題:", c["key"])
+        c["number"] = number                      # 言い回しを番号で回す(episodes.vary)
         info = E.RENDER[c["format"]](c, tts, out, rng)
         if info:
             break

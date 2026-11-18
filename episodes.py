@@ -22,6 +22,40 @@ OUTRO = {"compare": "Which pair should we test next?", "fit": "What should we co
          "overlay": "Which country should we move next?"}
 
 
+# ---------------------------------------------------------------- 毎回ちがう言い回し(繰り返しの多い動画に見えないように)
+
+LINES = {
+    "lock": ["Lock in your answer!", "Got your guess?", "Make your pick!", "Final answer?", "Time to decide!",
+             "Pick one, quick!"],
+    "outro_compare": ["Which pair should we test next?", "Name two countries for the next one!",
+                      "Did the map fool you?", "Were you right? Tell me below!"],
+    "outro_fit": ["What should we compare next?", "Did you guess the number?", "Which country should we fill next?",
+                  "How close was your guess?"],
+    "outro_overlay": ["Which country should we move next?", "Where should we drop it next time?",
+                      "Surprised? Tell me in the comments!", "Name a country to move next!"],
+    "outro_space": ["What should we compare next?", "Which planet or moon should we try next?",
+                    "Did you see that coming?", "Name a moon for the next one!"],
+    "why": ["Flat maps stretch everything near the poles.", "Most world maps stretch the land near the poles.",
+            "The usual world map makes countries near the poles look huge.",
+            "To flatten the Earth, maps have to stretch the poles."],
+    "fill": ["Let's fill it up!", "Let's start filling!", "Watch them pile in!", "Let's count them in!"],
+    "q_compare": ["{a} or {b}. Which one is bigger?", "Which is bigger: {a} or {b}?", "{a} or {b}? Pick the bigger one!"],
+    "q_fit": ["How many {plural} fit inside {big}?", "Guess how many {plural} fit inside {big}!",
+              "How many {plural} would it take to fill {big}?"],
+    "q_overlay": ["What if we moved {m} to {region}?", "Let's drop {m} on {region}!",
+                  "How far would {m} reach in {region}?"],
+    "q_space": ["{a} or {b}. Which one is wider?", "Which is wider: {a} or {b}?", "{a} or {b}? Pick the wider one!"],
+}
+
+
+def vary(c, key, **kw):
+    """番号で言い回しを回す(同じ番号なら作り直しても同じ)。役ごとに周期をずらす。"""
+    opts = LINES[key]
+    n = c.get("number", 1) + sum(map(ord, key))
+    t = opts[n % len(opts)].format(**kw)
+    return t[:1].upper() + t[1:]
+
+
 def place_name(ne_name):
     """画面に出す国名と、読み上げる国名。"""
     if ne_name in K.C:
@@ -65,13 +99,13 @@ def compare(c, tts, out, rng):
     base = M.base_map(view, colors={b: M.TARGET}, hide={a}, equator=True)
 
     lines = {
-        "q": f"{K.cap(va)} or {vb}. Which one is bigger?",
+        "q": vary(c, "q_compare", a=va, b=vb),
         "look": f"On this map, {va} looks bigger." if app >= 1.25 else "On this map, they look about the same.",
-        "lock": "Lock in your answer!",
+        "lock": vary(c, "lock"),
         "move": f"Now let's move {va} onto {vb}.",
         "ans": f"{K.cap(vb)} is about {times(r)} times bigger!",
-        "why": "Flat maps stretch everything near the poles.",
-        "outro": OUTRO["compare"],
+        "why": vary(c, "why"),
+        "outro": vary(c, "outro_compare"),
     }
     clips, dur = M.say_all(tts, lines)
     at = {"q": 0.08}
@@ -207,12 +241,12 @@ def fit(c, tts, out, rng):
     copies = _pack(view, inside, small, n)
 
     lines = {
-        "q": f"How many {plural} fit inside {vb}?",
+        "q": vary(c, "q_fit", plural=plural, big=vb),
         "c": f"Is it {choices[0]}? {choices[1]}? Or {choices[2]}?",
-        "lock": "Lock in your answer!",
-        "fill": "Let's fill it up!",
+        "lock": vary(c, "lock"),
+        "fill": vary(c, "fill"),
         "ans": f"About {n} {plural}!",
-        "outro": OUTRO["fit"],
+        "outro": vary(c, "outro_fit"),
     }
     clips, dur = M.say_all(tts, lines)
     at = {"q": 0.08}
@@ -342,11 +376,11 @@ def overlay(c, tts, out, rng):
             break
 
     lines = {
-        "q": f"What if we moved {vm} to {c['region_say']}?",
+        "q": vary(c, "q_overlay", m=vm, region=c["region_say"]),
         "land": f"{K.cap(vm)} would stretch from {va}...",
         "land2": f"all the way to {vb}!",
         "km": f"That's about {km:,} kilometers.",
-        "outro": OUTRO["overlay"],
+        "outro": vary(c, "outro_overlay"),
     }
     clips, dur = M.say_all(tts, lines)
     fly1 = 2.6
@@ -495,12 +529,12 @@ def space(c, tts, out, rng):
     ctry_c0 = (W / 2, max(body_c[1] + R + 90 + full_h * k / 2 + 50, 1420))
 
     lines = {
-        "q": f"{K.cap(bs)} or {csay}. Which one is wider?",
-        "lock": "Lock in your answer!",
+        "q": vary(c, "q_space", a=bs, b=csay),
+        "lock": vary(c, "lock"),
         "move": f"Let's put {csay} on {bs}.",
         "ans": f"{K.cap(bs if body_wins else csay)} is wider!",
         "nums": f"{K.cap(bs)}, {desc}, is about {bk:,} kilometers across. {K.cap(csay)} is about {ck:,} kilometers wide.",
-        "outro": "What should we compare next?",
+        "outro": vary(c, "outro_space"),
     }
     clips, dur = M.say_all(tts, lines)
     at = {"q": 0.08}

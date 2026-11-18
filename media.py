@@ -174,7 +174,7 @@ CREDIT = "Map data: Natural Earth (public domain) · Mercator projection"
 # ---------------------------------------------------------------- 読み上げ
 
 TTS_URL = "https://texttospeech.googleapis.com/v1/text:synthesize"
-DEFAULT_VOICE = "en-US-Chirp3-HD-Charon"
+DEFAULT_VOICE = "en-US-Chirp3-HD-Puck"       # チャンネルごとに声を変える(Painted When? は Charon)
 DEFAULT_RATE = 1.1
 
 
