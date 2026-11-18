@@ -44,6 +44,10 @@ LINES = {
               "How many {plural} would it take to fill {big}?"],
     "q_overlay": ["What if we moved {m} to {region}?", "Let's drop {m} on {region}!",
                   "How far would {m} reach in {region}?"],
+    "q_shape": ["Which country is this?", "Can you name this country by its shape?", "Whose outline is this?",
+                "Guess the country from its shape!"],
+    "outro_shape": ["Which shape should we try next?", "Did you get it from the shape alone?",
+                    "Was it easy or hard? Tell me below!", "Name a country for the next shape quiz!"],
     "q_space": ["{a} or {b}. Which one is wider?", "Which is wider: {a} or {b}?", "{a} or {b}? Pick the wider one!"],
 }
 
@@ -632,4 +636,120 @@ def space(c, tts, out, rng):
         countries=[n], tags=[bs_label, cs, "space", "solar system"], seconds=end, lines=lines)
 
 
-RENDER = {"compare": compare, "fit": fit, "overlay": overlay, "space": space}
+# ---------------------------------------------------------------- 形当て(シルエットから国を当てる)
+
+
+def shape(c, tts, out, rng):
+    n = c["country"]
+    cs, csay = K.short(n), K.spoken(n)
+    choices, correct = K.shape_choices(n, rng)
+    twin = K.similar_size(n)
+    area = geo.area_km2(n)
+    rings = [list(r) for r in geo.body(n)]
+    # シルエット: 正距方位図法(km)で本当の形のまま、画面の中央に大きく
+    cen = geo.centroid(n)
+    P = Proj(f"+proj=aeqd +lat_0={cen[1]} +lon_0={cen[0]} +units=km")
+    km = [[P(lo, la) for lo, la in r] for r in rings]
+    xs = [x for r in km for x, _ in r]
+    ys = [y for r in km for _, y in r]
+    k = min(880 / (max(xs) - min(xs)), 820 / (max(ys) - min(ys)))
+    ox, oy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
+    sil = [[(W / 2 + (x - ox) * k, 930 - (y - oy) * k) for x, y in r] for r in km]
+    # 答え: 地図の上の本当の位置(まわりの国も見えるように広めに)
+    view = geo.View.fit([rings], MAP_BOX, pad=0.28)
+    onmap = [view.pts(r) for r in rings]
+    base = M.base_map(view, hide={n})
+    blank = Image.new("RGBA", (W, H), M.SEA + (255,))
+    bd = ImageDraw.Draw(blank)
+    for gx in range(0, W, 90):
+        bd.line([gx, M.SHADE_TOP, gx, H], fill=M.GRID + (255,))
+    for gy in range(M.SHADE_TOP, H, 90):
+        bd.line([0, gy, W, gy], fill=M.GRID + (255,))
+    sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(sh).rectangle([0, 0, W, M.SHADE_TOP], fill=(8, 12, 24, 235))
+    blank.alpha_composite(sh)
+
+    say = [x[:1].upper() + x[1:] for x in choices]
+    fact = (f"{K.cap(csay)} is about the same size as {K.spoken(twin)}." if twin
+            else f"{K.cap(csay)} covers about {fmt_area(area).replace('km²', 'square kilometers')}.")
+    lines = {
+        "q": vary(c, "q_shape"),
+        "c": f"Is it {say[0]}? {say[1]}? Or {say[2]}?",
+        "lock": vary(c, "lock"),
+        "ans": f"It's {csay}!",
+        "fact": fact,
+        "outro": vary(c, "outro_shape"),
+    }
+    clips, dur = M.say_all(tts, lines)
+    at = {"q": 0.08}
+    at["c"] = at["q"] + dur["q"] + 0.25
+    at["lock"] = at["c"] + dur["c"] + 0.3
+    reveal = at["lock"] + dur["lock"] + 1.8
+    morph = (reveal + 0.1, reveal + 1.5)
+    at["ans"] = reveal + 0.2
+    at["fact"] = max(morph[1] + 0.2, at["ans"] + dur["ans"] + 0.3)
+    at["outro"] = at["fact"] + dur["fact"] + 0.6
+    end = at["outro"] + dur["outro"] + 1.0
+    effects = [(M.sfx_whoosh(), 0.0), *M.countdown_ticks(reveal), (M.sfx_ding(), at["ans"]), (M.sfx_whoosh(), morph[0])]
+    wav = out / "audio.wav"
+    M.write_audio(wav, end, clips, at, effects)
+
+    kicker, title, pill_y, timer_y = header("Which country is this?", kicker="SHAPE QUIZ")
+    pills = [M.pill(ch, (200, 200, 210), w=320, size=36) for ch in choices]
+    right = M.pill(choices[correct], (200, 200, 210), w=320, size=36, glow=True)
+    f_lab = M.font(M.SANS_BOLD, 40)
+    fact_txt = (f"About the same size as {K.spoken(twin)}" if twin else f"About {fmt_area(area)}")
+    fact_l = M.text_layer([fact_txt], M.font(M.SANS_BOLD, 44), M.GOLD + (255,), shadow=230)
+    area_l = M.text_layer([f"{cs}: {fmt_area(area)}"], M.font(M.SANS, 30), (225, 230, 240, 255), shadow=200)
+    credit = M.text_layer([M.CREDIT], M.font(M.SANS, 22), (170, 180, 200, 230), shadow=160)
+
+    def frame(t):
+        u = M.ease((t - morph[0]) / (morph[1] - morph[0]))
+        img = Image.blend(blank, base, u) if u > 0 else blank.copy()
+        layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        d = ImageDraw.Draw(layer)
+        grow = 0.92 + 0.08 * M.ease(t / 3.0)                  # 最初の数秒でゆっくり大きく
+        for a, b in zip(sil, onmap):
+            pts = []
+            for (x0, y0), (x1, y1) in zip(a, b):
+                xa, ya = W / 2 + (x0 - W / 2) * grow, 930 + (y0 - 930) * grow
+                pts.append((xa + (x1 - xa) * u, ya + (y1 - ya) * u))
+            d.polygon(pts, fill=M.MOVER + (240,), outline=(255, 230, 200, 255), width=3)
+        if u > 0:
+            ImageDraw.Draw(layer).rectangle([0, 0, W, M.SHADE_TOP], fill=(0, 0, 0, 0))
+        img.alpha_composite(layer)
+        img.alpha_composite(kicker, (0, 110))
+        img.alpha_composite(title, (0, TITLE_Y))
+        rr = M.ease((t - at["ans"]) / 0.3)
+        for i, pl in enumerate(pills):
+            px = 20 + i * 345
+            a_in = M.ease((t - at["c"] - 0.35 * i) / 0.25)
+            if i == correct and rr > 0:
+                img.alpha_composite(M.with_alpha(pl, 1 - rr), (px, pill_y))
+                img.alpha_composite(M.with_alpha(right, rr), (px, pill_y))
+            elif a_in > 0:
+                img.alpha_composite(M.with_alpha(pl, a_in * (1 - 0.6 * rr)), (px, pill_y))
+        M.timer_bar(img, t, 0.0, reveal, y=timer_y)
+        rf = M.ease((t - at["fact"]) / 0.4)
+        if rf > 0:
+            M.band(img, 1450, 1610, rf)
+            img.alpha_composite(M.with_alpha(fact_l, rf), (0, 1462))
+            img.alpha_composite(M.with_alpha(area_l, rf), (0, 1540))
+        img.alpha_composite(credit, (0, 1850))
+        return img
+
+    M.render(out / "video.mp4", wav, end, frame)
+    M.save_thumb(frame(reveal - 0.6), out / "site.jpg")
+    return dict(
+        site=dict(question="Which country is this?", choices=choices, answer=correct,
+                  result=f"It's {cs}!", details=[f"{cs}: {fmt_area(area)}"] +
+                  ([f"About the same size as {K.spoken(twin)}"] if twin else [])),
+        title=f"Which country has this shape? 🌍",
+        title_vals=dict(continent=K.continent(n), area=fmt_area(area)),
+        question="Which country is this?",
+        answer=f"{cs}." + (f" It's about the same size as {K.spoken(twin)} ({fmt_area(area)})." if twin
+                           else f" About {fmt_area(area)}."),
+        countries=[n], tags=[cs, "shape quiz", "guess the country"], seconds=end, lines=lines)
+
+
+RENDER = {"compare": compare, "fit": fit, "overlay": overlay, "space": space, "shape": shape}

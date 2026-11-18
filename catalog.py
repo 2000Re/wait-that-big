@@ -4,6 +4,7 @@
   compare  どっちが大きい？   地図では同じくらいに見える2国。片方を地球の上で動かして、本当の大きさを見せる
   fit      何個入る？         大きい国に、小さい国が(面積で)いくつ入るか。答えの数だけ形を並べる
   overlay  重ねてみる         細長い国などを別の地域に重ねて、端から端までどこに届くかを見せる(クイズではない)
+  shape    形当て             国のシルエットだけを見せて「どの国？」を3択で当てる。答えで地図の上の本当の位置に収まる
   space    宇宙               月・惑星・衛星の直径と、国の東西の幅を比べる(「月とオーストラリア、幅が広いのは？」)
 """
 import math
@@ -12,7 +13,7 @@ import random
 
 import geo
 
-FORMATS = ["compare", "fit", "overlay", "space"]
+FORMATS = ["compare", "fit", "overlay", "space", "shape"]
 
 # 主役にする国: データ上の名前 → (短い名前[題名・ボタン], 読み上げ[冠詞つき], 複数形[何個入る？で使う。不自然なら None])
 # 国境に争いのある国・地域(台湾、イスラエル、モロッコ、西サハラ、コソボなど)は主役にしない
@@ -233,8 +234,57 @@ def space_candidates():
     return out
 
 
+# 形当て: 形に特徴があって当てがいのある国は、少し多めに出す
+ICONIC = {"Italy", "Japan", "Chile", "United Kingdom", "Australia", "India", "Brazil", "Norway", "Greece", "New Zealand",
+          "Mexico", "Vietnam", "Madagascar", "South Korea", "Cuba", "Iceland", "Ireland", "Spain", "Turkey",
+          "Philippines", "Sri Lanka", "Argentina", "South Africa", "Egypt", "Thailand", "Portugal"}
+
+
+def continent(n):
+    return geo.feature(n)["properties"]["CONTINENT"]
+
+
+# 形当ては国境線そのものを主役に見せるので、国境に争いのある地域を含む国は出さない(カシミール、クリミアなど)
+SHAPE_EXCLUDE = {"India", "China", "Pakistan", "Russia", "Ukraine"}
+
+
+def shape_candidates():
+    out = []
+    for n in C:
+        if n == "Greenland" or n in SHAPE_EXCLUDE or geo.body_share(n) < 0.9:
+            continue
+        out.append(dict(format="shape", key=f"shape:{n}", country=n, score=2.0 if n in ICONIC else 1.0))
+    return out
+
+
+def shape_choices(n, rng):
+    """(選択肢3つ[短い名前], 正解の位置)。外れは同じ大陸で、面積が1/3〜3倍の国(足りなければ大陸を問わない)。"""
+    a = geo.area_km2(n)
+    skip = {n, "Greenland"} | SHAPE_EXCLUDE
+    pool = [m for m in C if m not in skip and continent(m) == continent(n) and 1 / 3 <= geo.area_km2(m) / a <= 3]
+    if len(pool) < 2:
+        pool = [m for m in C if m not in skip and 1 / 4 <= geo.area_km2(m) / a <= 4]
+    wrong = rng.sample(sorted(pool), 2)
+    names = [n] + wrong
+    rng.shuffle(names)
+    return [short(m) for m in names], names.index(n)
+
+
+def similar_size(n):
+    """別の大陸で、面積がいちばん近い国(0.85〜1.18倍)。なければ None。"""
+    a = geo.area_km2(n)
+    best = None
+    for m in C:
+        if m in (n, "Greenland") or continent(m) == continent(n) or geo.body_share(m) < BODY_SHARE_MIN:
+            continue
+        r = geo.area_km2(m) / a
+        if 0.85 <= r <= 1.18 and (best is None or abs(math.log(r)) < best[0]):
+            best = (abs(math.log(r)), m)
+    return best[1] if best else None
+
+
 CANDIDATES = {"compare": compare_candidates, "fit": fit_candidates, "overlay": overlay_candidates,
-              "space": space_candidates}
+              "space": space_candidates, "shape": shape_candidates}
 
 
 def countries_of(c):

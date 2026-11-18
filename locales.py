@@ -30,6 +30,13 @@ TITLES = {
         "de": "{m} auf {region} gelegt: Wie weit reicht es? 🌍",
         "pt": "{m} sobre {region}: até onde chega? 🌍",
     },
+    "shape": {
+        "ja": "この形の国はどこ？({continent})🌍",
+        "es": "¿Qué país de {continent} tiene esta forma? 🌍",
+        "fr": "Quel pays ({continent}) a cette forme ? 🌍",
+        "de": "Welches Land ({continent}) hat diese Form? 🌍",
+        "pt": "Que país ({continent}) tem esta forma? 🌍",
+    },
     "space": {
         "ja": "{body}と{country}、幅が広いのはどっち？🌍",
         "es": "{body} o {country}: ¿cuál es más ancho? 🌍",
@@ -56,6 +63,18 @@ REGIONS = {
                       "pt": "a América do Sul"},
     "the Middle East": {"ja": "中東", "es": "Oriente Medio", "fr": "le Moyen-Orient", "de": "den Nahen Osten",
                         "pt": "o Oriente Médio"},
+}
+
+# 大陸(Natural Earth の CONTINENT)
+CONTINENTS = {
+    "Europe": {"ja": "ヨーロッパ", "es": "Europa", "fr": "Europe", "de": "Europa", "pt": "Europa"},
+    "Asia": {"ja": "アジア", "es": "Asia", "fr": "Asie", "de": "Asien", "pt": "Ásia"},
+    "Africa": {"ja": "アフリカ", "es": "África", "fr": "Afrique", "de": "Afrika", "pt": "África"},
+    "North America": {"ja": "北アメリカ", "es": "Norteamérica", "fr": "Amérique du Nord", "de": "Nordamerika",
+                      "pt": "América do Norte"},
+    "South America": {"ja": "南アメリカ", "es": "Sudamérica", "fr": "Amérique du Sud", "de": "Südamerika",
+                      "pt": "América do Sul"},
+    "Oceania": {"ja": "オセアニア", "es": "Oceanía", "fr": "Océanie", "de": "Ozeanien", "pt": "Oceania"},
 }
 
 # 天体(catalog.BODIES の名前)
@@ -98,6 +117,8 @@ def build(c, number, description_en):
                 vals = dict(big=country(c["big"], lang), small=country(c["small"], lang))
             elif fmt == "overlay":
                 vals = dict(m=country(c["mover"], lang), region=REGIONS[c["region"]][lang])
+            elif fmt == "shape":
+                vals = dict(continent=CONTINENTS[geo.feature(c["country"])["properties"]["CONTINENT"]][lang])
             elif fmt == "space":
                 vals = dict(body=BODIES[c["body"]][lang], country=country(c["country"], lang))
             else:

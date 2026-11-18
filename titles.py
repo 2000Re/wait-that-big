@@ -32,6 +32,13 @@ TITLES = {
         ("on_top", "Put {m} on top of {region}. Where does it end? 🌍"),
         ("surprise", "{m} over {region}: the true size will surprise you 🌍"),
     ],
+    "shape": [
+        ("classic", "Can you name this country by its shape? 🌍"),
+        ("continent", "Which country in {continent} has this shape? 🌍"),
+        ("outline", "Guess the country from its outline 🌍"),
+        ("area", "This country is {area}. Can you name it? 🌍"),
+        ("shape_only", "Only the shape: which country is it? 🌍"),
+    ],
     "space": [
         ("classic", "{body} or {country}: which is wider? 🌍"),
         ("really", "Is {country} really wider than {body}? 🌍"),
