@@ -29,6 +29,15 @@ YouTube チャンネル **Wait, That Big?**([@wait-that-big](https://www.youtube
 「Fill Australia with Japans: how many does it take? 🌍」、「Drop Chile on Europe: where does it reach? 🌍」。
 型は `upload_history.json` の `title_style` に残る(#4 までは記録なし。#1〜#4 は形式ごとの classic の題名)。
 
+## 翻訳(題名と説明)
+
+投稿のときに、日本語・スペイン語・フランス語・ドイツ語・ポルトガル語の題名と説明を YouTube の「翻訳」として一緒に登録する
+(`locales.py`。視聴者の言語でその題名が表示される)。#11 から。AI は使わない: 国名は Natural Earth の `NAME_JA` など
+(`data/countries.geojson` に入れた)、題名の型と天体・地域の名前は `locales.py` の表。フランス語・ドイツ語・ポルトガル語は
+国名に冠詞が付くので「A ou B : …」のような冠詞の要らない形にしている。ポルトガル語の国名は Natural Earth のもの(ポルトガルの表記)。
+説明は、その言語の1〜2行のあとに英語の説明(答え・出典)をそのまま続ける。
+YouTube が翻訳を受け付けなかったとき(400・403)は、翻訳なしで投稿する(投稿は止めない)。
+
 ## ファイル
 
 | ファイル | 役割 |

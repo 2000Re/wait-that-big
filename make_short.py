@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo
 
 import catalog as K
 import episodes as E
+import locales
 import media as M
 import titles
 
@@ -109,6 +110,7 @@ def main():
         "title": f"[{number}] {title}",
         "title_style": title_style,
         "description": description(info, number, c["format"]),
+        "localizations": locales.build(c, number, description(info, number, c["format"])),
         "tags": tags(info),
         "answer": info["answer"],
         "video": "video.mp4",

@@ -16,7 +16,7 @@ def rnd(c):
 
 def main(src):
     feats = json.loads(Path(src).read_text())["features"]
-    out = [{"type": "Feature", "properties": {k: f["properties"][k] for k in ("NAME", "NAME_LONG", "CONTINENT")},
+    out = [{"type": "Feature", "properties": {k: f["properties"][k] for k in ("NAME", "NAME_LONG", "CONTINENT", "NAME_JA", "NAME_ES", "NAME_FR", "NAME_DE", "NAME_PT")},
             "geometry": {"type": f["geometry"]["type"], "coordinates": rnd(f["geometry"]["coordinates"])}}
            for f in feats]
     OUT.write_text(json.dumps({"type": "FeatureCollection", "features": out}, separators=(",", ":")))
