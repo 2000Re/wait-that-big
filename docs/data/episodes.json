@@ -182,5 +182,24 @@
    "About 5,300 km from end to end"
   ],
   "image": "img/10-what-if-indonesia-were-in-africa.jpg"
+ },
+ {
+  "number": 11,
+  "slug": "11-io-or-australia-which-is-wider",
+  "format": "space",
+  "video_id": "EoElkODUjUQ",
+  "uploaded_at": "2026-11-19T03:24:48+00:00",
+  "question": "Io or Australia: which is wider?",
+  "choices": [
+   "Io",
+   "Australia"
+  ],
+  "answer": 1,
+  "result": "Australia is wider!",
+  "details": [
+   "Io (a moon of Jupiter): about 3,600 km across",
+   "Australia: about 4,000 km wide (east to west, mainland)"
+  ],
+  "image": "img/11-io-or-australia-which-is-wider.jpg"
  }
 ]
