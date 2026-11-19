@@ -137,7 +137,7 @@ YouTube のチャンネルは Painted When? と同じ Google アカウント(ブ
    - URL: `https://api.github.com/repos/2000Re/wait-that-big/actions/workflows/post.yml/dispatches`(POST)
    - ヘッダー: `Authorization: Bearer <このリポジトリの Actions に書き込める fine-grained token>`、`Accept: application/vnd.github+json`
    - 本文: `{"ref":"main","inputs":{"scheduled":"true"}}`
-   - 時刻(Asia/Tokyo): 12:23・19:23 と、取りこぼし用に 30分後の 12:53・19:53。1日2本を超える分と、前の投稿から1.5時間以内の分は自動でスキップする
+   - 時刻(Asia/Tokyo): 9:23・12:23 と、取りこぼし用に 30分後の 9:53・12:53(crontab 形式で `23,53 9,12 * * *`)。視聴者はアメリカが最も多い(約35%)ので、米国東部の夜(19:23・22:23)に当たる時刻にしている。1日2本を超える分と、前の投稿から1.5時間以内の分は自動でスキップする
 
 手動で試すときは Actions → post → Run workflow(`dry_run` で動画だけ作る、`privacy` で公開設定)。
 失敗すると Issue が立つ(リフレッシュトークンが無効になったときは `token-invalid`)。
