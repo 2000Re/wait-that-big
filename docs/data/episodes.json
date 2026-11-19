@@ -201,5 +201,25 @@
    "Australia: about 4,000 km wide (east to west, mainland)"
   ],
   "image": "img/11-io-or-australia-which-is-wider.jpg"
+ },
+ {
+  "number": 12,
+  "slug": "12-which-country-is-this",
+  "format": "shape",
+  "video_id": "uJ3qtY3mS48",
+  "uploaded_at": "2026-11-19T10:41:56+00:00",
+  "question": "Which country is this?",
+  "choices": [
+   "Cuba",
+   "Greece",
+   "Germany"
+  ],
+  "answer": 0,
+  "result": "It's Cuba!",
+  "details": [
+   "Cuba: 109,000 km²",
+   "About the same size as Iceland"
+  ],
+  "image": "img/12-which-country-is-this.jpg"
  }
 ]

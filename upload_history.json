@@ -167,5 +167,20 @@
     "video_id": "EoElkODUjUQ",
     "privacy": "public",
     "uploaded_at": "2026-11-19T03:24:48+00:00"
+  },
+  {
+    "number": 12,
+    "key": "shape:Cuba",
+    "format": "shape",
+    "countries": [
+      "Cuba"
+    ],
+    "date": "2026-11-19",
+    "title": "[12] Can you name this country by its shape? 🌍",
+    "title_style": "shape_classic",
+    "answer": "Cuba. It's about the same size as Iceland (109,000 km²).",
+    "video_id": "uJ3qtY3mS48",
+    "privacy": "public",
+    "uploaded_at": "2026-11-19T10:41:56+00:00"
   }
 ]
