@@ -43,6 +43,7 @@ W, H, FPS = 1920, 1080, 30
 SR = M.SR
 ROUNDS = 12
 THINK = 5.0                                  # 考える時間(秒)
+MIN_CHAPTER = 11.0                           # YouTube のチャプターは1つ10秒以上(1つでも短いとチャプター全体が出ない)
 PANEL = (0, 0, 620, H)                       # 左の文字の帯
 PANEL_W = PANEL[2]
 MAP_BOX = (660, 50, W - 40, H - 70)          # 地図の主役を収める範囲
@@ -340,7 +341,7 @@ def intro(tts, total):
                    "Flat maps lie about size. Keep score, and let's see how many you get right!"}
     clips, dur = M.say_all(tts, lines)
     at = {"hi": 0.4}
-    end = at["hi"] + dur["hi"] + 0.8
+    end = max(MIN_CHAPTER, at["hi"] + dur["hi"] + 0.8)
     base = base_map(world_view())
     t1 = text(["TRUE SIZE", "CHALLENGE"], 76, M.GOLD + (255,), spacing=1.05)
     t2 = text([f"{total} rounds · {int(THINK)} seconds each"], 34, M.WHITE + (255,), bold=False)
@@ -362,7 +363,7 @@ def outro(tts, total):
                     "And subscribe for a new true-size quiz every day."}
     clips, dur = M.say_all(tts, lines)
     at = {"how": 0.4}
-    end = at["how"] + dur["how"] + 2.5
+    end = max(MIN_CHAPTER, at["how"] + dur["how"] + 2.5)
     base = base_map(world_view())
     t1 = text(["How many did", "you get right?"], 60, M.WHITE + (255,), spacing=1.1)
     hi, mid = math.ceil(total * 0.8), math.ceil(total * 0.5)
@@ -508,6 +509,14 @@ def thumbnail(seg, number, path):
     img.convert("RGB").crop((0, 0, W - 96, H - 54)).resize((1280, 720), Image.LANCZOS).save(path, quality=90)
 
 
+def check_chapters(starts, total):
+    """チャプターの決まり(0:00 から始まる・3つ以上・どれも10秒以上)を満たすか。満たさなければ止める。"""
+    ends = starts[1:] + [total]
+    short = [(stamp(a), round(b - a, 1)) for a, b in zip(starts, ends) if b - a < 10]
+    if len(starts) < 3 or short:
+        raise SystemExit(f"チャプターが YouTube の決まりを満たしません(10秒未満: {short})")
+
+
 def description(number, rounds, starts):
     lines = [
         f"True Size Challenge #{number}: {len(rounds)} rounds of map questions. You get {int(THINK)} seconds each. "
@@ -557,6 +566,11 @@ def build(args):
     wav = out / "audio.wav"
     write_wav(wav, m)
     print(f"動画を書き出しています({total:.0f} 秒)", flush=True)
+    t0, starts = 0.0, []
+    for sg in segments:
+        starts.append(t0)
+        t0 += sg["end"]
+    check_chapters(starts, total)          # 書き出す前に確かめる
     starts = render(out / "video.mp4", wav, segments, total)
     wav.unlink()
     thumb_seg = next((r for r in rounds if r["key"].startswith("fit:")), rounds[0])
