@@ -240,5 +240,26 @@
    "Norway: 387,000 km²"
   ],
   "image": "img/13-norway-or-nigeria-which-is-bigger.jpg"
+ },
+ {
+  "number": 14,
+  "slug": "14-how-many-polands-fit-inside-greenland",
+  "format": "fit",
+  "video_id": "WPYR647yIbk",
+  "uploaded_at": "2026-11-20T03:32:18+00:00",
+  "question": "How many Polands fit inside Greenland?",
+  "choices": [
+   "7",
+   "12",
+   "20"
+  ],
+  "answer": 0,
+  "result": "About 7 Polands!",
+  "details": [
+   "Greenland: 2.17 million km²",
+   "Poland: 314,000 km²",
+   "2.17 million km² ÷ 314,000 km² ≈ 7"
+  ],
+  "image": "img/14-how-many-polands-fit-inside-greenland.jpg"
  }
 ]
