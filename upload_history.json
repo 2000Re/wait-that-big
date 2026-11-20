@@ -182,5 +182,21 @@
     "video_id": "uJ3qtY3mS48",
     "privacy": "public",
     "uploaded_at": "2026-11-19T10:41:56+00:00"
+  },
+  {
+    "number": 13,
+    "key": "compare:Norway|Nigeria",
+    "format": "compare",
+    "countries": [
+      "Norway",
+      "Nigeria"
+    ],
+    "date": "2026-11-20",
+    "title": "[13] Guess which is bigger: Norway or Nigeria? 🌍",
+    "title_style": "compare_guess",
+    "answer": "Nigeria is about 2.3× bigger (908,000 km² vs 387,000 km²).",
+    "video_id": "AtIVXR5uG0Y",
+    "privacy": "public",
+    "uploaded_at": "2026-11-20T00:34:00+00:00"
   }
 ]

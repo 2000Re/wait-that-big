@@ -221,5 +221,24 @@
    "About the same size as Iceland"
   ],
   "image": "img/12-which-country-is-this.jpg"
+ },
+ {
+  "number": 13,
+  "slug": "13-norway-or-nigeria-which-is-bigger",
+  "format": "compare",
+  "video_id": "AtIVXR5uG0Y",
+  "uploaded_at": "2026-11-20T00:34:00+00:00",
+  "question": "Norway or Nigeria: which is bigger?",
+  "choices": [
+   "Norway",
+   "Nigeria"
+  ],
+  "answer": 1,
+  "result": "Nigeria is about 2.3× bigger!",
+  "details": [
+   "Nigeria: 908,000 km²",
+   "Norway: 387,000 km²"
+  ],
+  "image": "img/13-norway-or-nigeria-which-is-bigger.jpg"
  }
 ]
