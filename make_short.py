@@ -41,6 +41,36 @@ LEADS = ["Guess before the reveal! 👀", "Make your guess before the answer! �
          "What's your guess? Watch to the end! 👀"]
 
 
+HERE = Path(__file__).resolve().parent
+# 姉妹チャンネル(説明欄の最後で紹介する)。閉じる予定の Too Close to Tell は入れない
+SISTERS = [
+    ("🎨 Painted When? — guess the year a famous painting was made", "https://www.youtube.com/@painted-when"),
+    ("🛰️ Guess From Space — name famous places from satellite images", "https://www.youtube.com/@guess-from-space"),
+]
+
+
+def latest_long():
+    """いちばん新しい通常動画(True Size Challenge)の (番号, URL)。なければ None。"""
+    p = HERE / "longform_history.json"
+    try:
+        hist = json.loads(p.read_text() or "[]")       # 限定公開で上げた回も、あとで公開にしている前提
+    except (OSError, ValueError):
+        return None
+    if not hist:
+        return None
+    h = max(hist, key=lambda x: x["number"])
+    return h["number"], f"https://youtu.be/{h['video_id']}"
+
+
+def promo_lines():
+    out = []
+    lg = latest_long()
+    if lg:
+        out += [f"▶️ Try the full 12-round True Size Challenge #{lg[0]}: {lg[1]}", ""]
+    out += ["More quizzes from the same creator:"] + [f"{t}: {u}" for t, u in SISTERS] + [""]
+    return out
+
+
 def description(info, number, fmt=None):
     return "\n".join([
         info["question"],
@@ -53,6 +83,7 @@ def description(info, number, fmt=None):
         "",
         f"More true-size quizzes: {SITE}/",
         "",
+        *promo_lines(),
         "Map data: Natural Earth (public domain)." + (" Sizes: NASA." if fmt == "space" else ""),
         "",
         HASHTAGS,
