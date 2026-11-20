@@ -8,6 +8,7 @@
   space    宇宙               月・惑星・衛星の直径と、国の東西の幅を比べる(「月とオーストラリア、幅が広いのは？」)
 """
 import math
+from collections import Counter
 from functools import lru_cache
 import random
 
@@ -306,19 +307,37 @@ def next_format(history):
     return FORMATS[(FORMATS.index(last) + 1) % len(FORMATS)] if last else FORMATS[0]
 
 
+PER_COUNTRY = 2       # 選ぶ候補(上位 top 件)の中で、1つの国が占めてよい数
+OFTEN_WINDOW = 20     # この本数のうちに OFTEN_MAX 回出た国は、しばらく出さない
+OFTEN_MAX = 2
+
+
 def choose(fmt, history, seed, top=40, recent=4):
-    """まだ出していないお題から、得点の高いものを中心に選ぶ。
-    直近 recent 本に出てきた国・天体・地域(比べる相手、overlay の行き先と端の国も含む)は避ける。"""
+    """まだ出していないお題から、得点の高いものを中心に選ぶ。次の国・天体・地域は避ける
+    (比べる相手、overlay の行き先と端の国も含む):
+      - 直近 recent 本に出たもの
+      - 直近 OFTEN_WINDOW 本に OFTEN_MAX 回以上出たもの(グリーンランドのように、どの組み合わせでも
+        得点が高くなる国が出すぎないように。2026-11-20 の時点で、何個入る？の3本ともグリーンランドだった)
+    また、候補の上位 top 件の中で、1つの国は PER_COUNTRY 件までにする(上位がその国ばかりにならないように)。"""
     used = {h["key"] for h in history}
     avoid = set()
     for h in history[-recent:]:
         avoid |= shown_in(h)
+    seen = Counter(n for h in history[-OFTEN_WINDOW:] for n in shown_in(h))
+    avoid |= {n for n, k in seen.items() if k >= OFTEN_MAX}
     cands = [c for c in CANDIDATES[fmt]() if c["key"] not in used]
     cands.sort(key=lambda c: -c["score"])
     fresh = [c for c in cands if not countries_of(c) & avoid] or cands
     if not fresh:
         return None
     rng = random.Random(seed)
-    pool = fresh[:top]
+    pool, per = [], Counter()
+    for c in fresh:
+        if any(per[n] >= PER_COUNTRY for n in countries_of(c)):
+            continue
+        pool.append(c)
+        per.update(countries_of(c))
+        if len(pool) >= top:
+            break
     weights = [c["score"] for c in pool]
     return rng.choices(pool, weights=weights)[0]
