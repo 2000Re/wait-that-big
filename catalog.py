@@ -301,8 +301,21 @@ def shown_in(h):
     return names
 
 
+# 形式の順番(7本周期)。重ねてみる(overlay)と何個入る？(fit)は2回ずつ。2026-11-21 の再生数の平均が
+# overlay 2,237・fit 1,839・compare 1,473・space 1,358・shape 1,302 だったので、強い2つの出番を増やした
+CYCLE = ["overlay", "fit", "compare", "overlay", "fit", "space", "shape"]
+CYCLE_START = 15        # この番号の回から CYCLE を使う(それまでは5つを順番に回していた)
+
+
 def next_format(history):
-    """前の回の次の形式(compare → fit → overlay → space → compare …)。"""
+    """次の回の形式。番号が CYCLE_START 以降は CYCLE の順。前の回と同じ形式が続くときは1つ先に進める。"""
+    number = max([h.get("number", 0) for h in history], default=0) + 1
+    if number >= CYCLE_START:
+        fmt = CYCLE[(number - CYCLE_START) % len(CYCLE)]
+        last = history[-1].get("format") if history else None
+        if fmt == last:
+            fmt = CYCLE[(number - CYCLE_START + 1) % len(CYCLE)]
+        return fmt
     last = next((h.get("format") for h in reversed(history) if h.get("format") in FORMATS), None)
     return FORMATS[(FORMATS.index(last) + 1) % len(FORMATS)] if last else FORMATS[0]
 
@@ -324,7 +337,8 @@ def choose(fmt, history, seed, top=40, recent=4):
     for h in history[-recent:]:
         avoid |= shown_in(h)
     seen = Counter(n for h in history[-OFTEN_WINDOW:] for n in shown_in(h))
-    avoid |= {n for n, k in seen.items() if k >= OFTEN_MAX}
+    regions = {r[0] for r in REGIONS}          # 行き先の地域は4つしかないので、この条件の対象にしない
+    avoid |= {n for n, k in seen.items() if k >= OFTEN_MAX and n not in regions}
     cands = [c for c in CANDIDATES[fmt]() if c["key"] not in used]
     cands.sort(key=lambda c: -c["score"])
     fresh = [c for c in cands if not countries_of(c) & avoid] or cands

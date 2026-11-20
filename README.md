@@ -6,7 +6,12 @@ YouTube チャンネル **Wait, That Big?**([@wait-that-big](https://www.youtube
 
 ## 形式
 
-前の回の次の形式を出す(compare → fit → overlay → space → shape → compare …。space は #7 から、shape は 2026-11-19 から)。
+#15 からは7本周期(`catalog.CYCLE`): overlay → fit → compare → overlay → fit → space → shape。重ねてみる(overlay)と
+何個入る？(fit)は2回ずつ(2026-11-21 の再生数の平均が overlay 2,237・fit 1,839・compare 1,473・space 1,358・shape 1,302
+だったため)。#14 までは compare → fit → overlay → space → shape の順に1回ずつ回していた。
+
+説明欄の終わりには、最新の通常動画「True Size Challenge」へのリンクと、姉妹チャンネル(Painted When?・Guess From Space)
+へのリンクを入れる(上級者向け機能でリンクがクリックできるようになったため。閉じる予定の Too Close to Tell は入れない)。
 
 | 形式 | 内容 | 例 |
 |---|---|---|
@@ -82,6 +87,9 @@ python make_short.py --tts dummy --key "fit:Australia|Japan" --history /tmp/none
 - 説明欄: 各問の開始時刻のチャプター、答えの一覧(ネタバレ注意と書く)、出典
 - サムネイル(1280x720)も作り、`thumbnails.set` で設定する。チャンネルの電話番号確認が済んでいないと 403 になるので、
   そのときは警告だけ出して投稿は続ける(YouTube Studio で手で設定する)
+- A/B テスト用に、別のサムネイルを2つ作る: `thumbnail_b.jpg`(その回の問い)、`thumbnail_c.jpg`(「Can you get 12/12?」)。
+  Actions の実行結果の Artifacts(`longform`、14日間)からダウンロードし、YouTube Studio の動画の詳細 →
+  サムネイルの「テストと比較」に、設定済みのもの(a)と一緒に入れる
 - 投稿の記録は `longform_history.json`(Shorts の `upload_history.json` とは別。番号も別)
 
 自動化(`.github/workflows/longform.yml`):

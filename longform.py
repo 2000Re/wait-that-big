@@ -495,16 +495,28 @@ def stamp(sec):
     return f"{sec // 60}:{sec % 60:02d}"
 
 
-def thumbnail(seg, number, path):
-    """サムネイル(1280x720)。問題の途中のコマに、大きな題名を重ねる。"""
+def thumbnail(seg, number, path, style="a"):
+    """サムネイル(1280x720)。問題の途中のコマに、大きな文字を重ねる。
+    style: a = 題名「TRUE SIZE CHALLENGE」(投稿のときに設定する)/ b = その問題の問い / c = 「Can you get 12/12?」
+    b と c は YouTube Studio の「テストと比較」(A/B テスト)で a と比べる用。"""
     img = seg["frame"](seg["thumb_t"]).convert("RGBA")
     ImageDraw.Draw(img).rectangle([0, 0, PANEL_W, H], fill=NAVY + (255,))
-    t1 = text(["TRUE SIZE", "CHALLENGE"], 86, M.GOLD + (255,), spacing=1.0, shadow=255)
-    t2 = text([f"#{number} · {ROUNDS} rounds"], 52, M.WHITE + (255,), shadow=255)
-    t3 = text(["Can you beat", "the map?"], 64, M.WHITE + (255,), spacing=1.05, shadow=255)
-    img.alpha_composite(t1, (0, 150))
-    img.alpha_composite(t2, (0, 430))
-    img.alpha_composite(t3, (0, 640))
+    if style == "b":
+        q = wrap(seg["chapter"], 70, PANEL_W - 60, max_lines=4)
+        img.alpha_composite(text(q, 70, M.WHITE + (255,), spacing=1.08, shadow=255), (0, 200))
+        img.alpha_composite(text([f"True Size Challenge #{number}"], 40, M.GOLD + (255,), shadow=255), (0, 760))
+    elif style == "c":
+        img.alpha_composite(text(["Can you get", f"{ROUNDS}/{ROUNDS}?"], 100, M.GOLD + (255,), spacing=1.0, shadow=255),
+                            (0, 220))
+        img.alpha_composite(text(["Flat maps lie", "about size"], 56, M.WHITE + (255,), spacing=1.08, shadow=255),
+                            (0, 600))
+    else:
+        t1 = text(["TRUE SIZE", "CHALLENGE"], 86, M.GOLD + (255,), spacing=1.0, shadow=255)
+        t2 = text([f"#{number} · {ROUNDS} rounds"], 52, M.WHITE + (255,), shadow=255)
+        t3 = text(["Can you beat", "the map?"], 64, M.WHITE + (255,), spacing=1.05, shadow=255)
+        img.alpha_composite(t1, (0, 150))
+        img.alpha_composite(t2, (0, 430))
+        img.alpha_composite(t3, (0, 640))
     # 下の出典の行は小さくて読めないので、16:9 のまま下を切る(右も同じ割合だけ切る)
     img.convert("RGB").crop((0, 0, W - 96, H - 54)).resize((1280, 720), Image.LANCZOS).save(path, quality=90)
 
@@ -575,6 +587,8 @@ def build(args):
     wav.unlink()
     thumb_seg = next((r for r in rounds if r["key"].startswith("fit:")), rounds[0])
     thumbnail(thumb_seg, number, out / "thumbnail.jpg")
+    for style in ("b", "c"):           # A/B テスト用(Actions の Artifacts からダウンロードする)
+        thumbnail(thumb_seg, number, out / f"thumbnail_{style}.jpg", style)
 
     meta = {
         "number": number,
