@@ -16,6 +16,7 @@ import geo
 import media as M
 from media import W, H
 
+TAIL = 0.4          # 最後の読み上げのあとの間(秒)。以前は 1.0(2026-11-21 に短くした。くり返し再生につなげやすく)
 MAP_BOX = (40, 470, W - 40, 1390)     # 地図の主役を収める範囲(下は答えの帯のために空ける)
 KICKER = "TRUE SIZE"
 OUTRO = {"compare": "Which pair should we test next?", "fit": "What should we compare next?",
@@ -121,7 +122,7 @@ def compare(c, tts, out, rng):
     at["ans"] = move[1] + 0.2
     at["why"] = at["ans"] + dur["ans"] + 0.35
     at["outro"] = at["why"] + dur["why"] + 0.4
-    end = at["outro"] + dur["outro"] + 1.0
+    end = at["outro"] + dur["outro"] + TAIL
     effects = [(M.sfx_whoosh(), 0.0), *M.countdown_ticks(reveal), (M.sfx_whoosh(), move[0]), (M.sfx_ding(), at["ans"])]
     wav = out / "audio.wav"
     M.write_audio(wav, end, clips, at, effects)
@@ -262,7 +263,7 @@ def fit(c, tts, out, rng):
     step = min(0.28, 5.0 / max(1, len(copies)))
     at["ans"] = t_fill0 + step * len(copies) + 0.3
     at["outro"] = at["ans"] + dur["ans"] + 0.6
-    end = at["outro"] + dur["outro"] + 1.0
+    end = at["outro"] + dur["outro"] + TAIL
     effects = [(M.sfx_whoosh(), 0.0), *M.countdown_ticks(reveal), (M.sfx_ding(), at["ans"])]
     effects += [(M.sfx_pop(), t_fill0 + k * step) for k in range(len(copies))]
     wav = out / "audio.wav"
@@ -393,7 +394,7 @@ def overlay(c, tts, out, rng):
     at["land2"] = at["land"] + dur["land"] + 0.1
     at["km"] = at["land2"] + dur["land2"] + 0.4
     at["outro"] = at["km"] + dur["km"] + 0.7
-    end = at["outro"] + dur["outro"] + 1.0
+    end = at["outro"] + dur["outro"] + TAIL
     effects = [(M.sfx_whoosh(), 0.0), (M.sfx_pop(), fly1), (M.sfx_pop(), at["land"] + 0.1),
                (M.sfx_pop(), at["land2"] + 0.1), (M.sfx_ding(), at["km"])]
     wav = out / "audio.wav"
@@ -549,7 +550,7 @@ def space(c, tts, out, rng):
     at["ans"] = move[1] + 0.2
     at["nums"] = at["ans"] + dur["ans"] + 0.4
     at["outro"] = at["nums"] + dur["nums"] + 0.6
-    end = at["outro"] + dur["outro"] + 1.0
+    end = at["outro"] + dur["outro"] + TAIL
     effects = [(M.sfx_whoosh(), 0.0), *M.countdown_ticks(reveal), (M.sfx_whoosh(), move[0]),
                (M.sfx_ding(), at["ans"]), (M.sfx_pop(), at["nums"])]
     wav = out / "audio.wav"
@@ -689,7 +690,7 @@ def shape(c, tts, out, rng):
     at["ans"] = reveal + 0.2
     at["fact"] = max(morph[1] + 0.2, at["ans"] + dur["ans"] + 0.3)
     at["outro"] = at["fact"] + dur["fact"] + 0.6
-    end = at["outro"] + dur["outro"] + 1.0
+    end = at["outro"] + dur["outro"] + TAIL
     effects = [(M.sfx_whoosh(), 0.0), *M.countdown_ticks(reveal), (M.sfx_ding(), at["ans"]), (M.sfx_whoosh(), morph[0])]
     wav = out / "audio.wav"
     M.write_audio(wav, end, clips, at, effects)
