@@ -6,6 +6,8 @@
   overlay  重ねてみる         細長い国などを別の地域に重ねて、端から端までどこに届くかを見せる(クイズではない)
   shape    形当て             国のシルエットだけを見せて「どの国？」を3択で当てる。答えで地図の上の本当の位置に収まる
   space    宇宙               月・惑星・衛星の直径と、国の東西の幅を比べる(「月とオーストラリア、幅が広いのは？」)
+  space_area 宇宙の面積         天体の表面全体の面積と、国の面積を比べる(「冥王星とロシア、広いのは？」)。
+                               CYCLE の space の回で、space と交互に出す(お題は AREA_PAIRS だけ)
 """
 import math
 from collections import Counter
@@ -14,7 +16,7 @@ import random
 
 import geo
 
-FORMATS = ["compare", "fit", "overlay", "space", "shape"]
+FORMATS = ["compare", "fit", "overlay", "space", "shape", "space_area"]
 
 # 主役にする国: データ上の名前 → (短い名前[題名・ボタン], 読み上げ[冠詞つき], 複数形[何個入る？で使う。不自然なら None])
 # 国境に争いのある国・地域(台湾、イスラエル、モロッコ、西サハラ、コソボなど)は主役にしない
@@ -203,6 +205,30 @@ BODIES = {
 
 FAMOUS_BODIES = {"The Moon", "Mars", "Pluto", "Mercury"}
 
+# 宇宙の面積(space_area)のお題。天体の表面積は NASA の平均直径から球として計算(π × 直径²)。
+# 国の面積は公式の総面積(陸と内水面。CIA World Factbook の Area: total)。地図データ(Natural Earth)の面積ではなく
+# こちらを使う(差が数%しかないので、データの違いで答えが変わらないように)。
+# 差が 3% 未満の組み合わせ(エリスとロシア、ケレスとアルゼンチン、ミマスとスペインなど)は、直径の誤差や
+# 天体のいびつな形で逆転しかねないので入れない
+OFFICIAL_AREA = {"Russia": 17_098_242, "Australia": 7_741_220, "India": 3_287_263, "Brazil": 8_515_770}
+AREA_PAIRS = [("Pluto", "Russia"), ("Rhea", "Australia"), ("Titania", "Brazil"), ("Ceres", "India")]
+AREA_MIN_GAP = 0.03
+
+
+def body_surface_km2(b):
+    return math.pi * BODIES[b][2] ** 2
+
+
+def space_area_candidates():
+    out = []
+    for i, (b, n) in enumerate(AREA_PAIRS):
+        r = OFFICIAL_AREA[n] / body_surface_km2(b)
+        if abs(r - 1) < AREA_MIN_GAP:
+            continue
+        out.append(dict(format="space_area", key=f"space_area:{b}|{n}", body=b, country=n,
+                        score=(len(AREA_PAIRS) - i) * (2.0 if b in FAMOUS_BODIES else 1.0)))
+    return out
+
 
 @lru_cache(maxsize=None)
 def country_width(n):
@@ -285,7 +311,7 @@ def similar_size(n):
 
 
 CANDIDATES = {"compare": compare_candidates, "fit": fit_candidates, "overlay": overlay_candidates,
-              "space": space_candidates, "shape": shape_candidates}
+              "space": space_candidates, "shape": shape_candidates, "space_area": space_area_candidates}
 
 
 def countries_of(c):
@@ -315,6 +341,12 @@ def next_format(history):
         last = history[-1].get("format") if history else None
         if fmt == last:
             fmt = CYCLE[(number - CYCLE_START + 1) % len(CYCLE)]
+        if fmt == "space":
+            # 宇宙の回は、幅比べ(space)と面積比べ(space_area)を交互に。面積比べのお題が残っていなければ幅比べ
+            prev = next((h.get("format") for h in reversed(history) if h.get("format") in ("space", "space_area")), None)
+            used = {h.get("key") for h in history}
+            if prev == "space" and any(c["key"] not in used for c in space_area_candidates()):
+                fmt = "space_area"
         return fmt
     last = next((h.get("format") for h in reversed(history) if h.get("format") in FORMATS), None)
     return FORMATS[(FORMATS.index(last) + 1) % len(FORMATS)] if last else FORMATS[0]

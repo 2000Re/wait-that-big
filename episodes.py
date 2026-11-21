@@ -49,6 +49,10 @@ LINES = {
                 "Guess the country from its shape!"],
     "outro_shape": ["Which shape should we try next?", "Did you get it from the shape alone?",
                     "Was it easy or hard? Tell me below!", "Name a country for the next shape quiz!"],
+    "q_space_area": ["Which is bigger: all of {a}'s surface, or {b}?", "{b}, or the whole surface of {a}? Which is bigger?",
+                     "Could {b} cover all of {a}? Which is bigger?"],
+    "outro_space_area": ["Which planet or country should we compare next?", "Did you see that coming?",
+                         "Name a moon and a country for the next one!", "Were you right? Tell me below!"],
     "q_space": ["{a} or {b}. Which one is wider?", "Which is wider: {a} or {b}?", "{a} or {b}? Pick the wider one!"],
 }
 
@@ -755,4 +759,198 @@ def shape(c, tts, out, rng):
         countries=[n], tags=[cs, "shape quiz", "guess the country"], seconds=end, lines=lines)
 
 
-RENDER = {"compare": compare, "fit": fit, "overlay": overlay, "space": space, "shape": shape}
+def _fill_height(r, f):
+    """半径 r の円を下から満たして、面積の割合が f になる高さ。"""
+    lo, hi = 0.0, 2 * r
+    for _ in range(40):
+        h = (lo + hi) / 2
+        a = r * r * math.acos((r - h) / r) - (r - h) * math.sqrt(max(0.0, 2 * r * h - h * h))
+        lo, hi = (h, hi) if a < f * math.pi * r * r else (lo, h)
+    return (lo + hi) / 2
+
+
+def millions(km2):
+    return f"{km2 / 1e6:.1f} million"
+
+
+def space_area(c, tts, out, rng):
+    """天体の表面全体の面積と、国の面積を比べる。天体の表面を、面積を変えずに円に広げ(ランベルト正積方位図法で
+    球の全体は直径が2倍の円になる)、そこへ同じ縮尺の国を「流し込む」。国が円の何%を埋めるか(あふれるか)で見せる。"""
+    b, n = c["body"], c["country"]
+    bsay, desc, diam, color = K.BODIES[b]
+    bs = b.replace("The ", "the ") if b.startswith("The ") else b
+    bs_label = b.replace("The ", "") if b == "The Moon" else b
+    cs, csay = K.short(n), K.spoken(n)
+    surf, area = K.body_surface_km2(b), K.OFFICIAL_AREA[n]
+    f = area / surf
+    body_wins = surf > area
+    bk = round_km(diam)
+    # 国の形(ランベルト正積方位図法、km。面積が正しく見える)
+    cen = geo.centroid(n)
+    P = Proj(f"+proj=laea +lat_0={cen[1]} +lon_0={cen[0]} +units=km")
+    rings = [[P(lo, la) for lo, la in r] for r in geo.body(n)]
+    xs = [x for r in rings for x, _ in r]
+    ys = [y for r in rings for _, y in r]
+    ox, oy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
+    rings = [[(x - ox, y - oy) for x, y in r] for r in rings]
+    full_w, full_h = max(xs) - min(xs), max(ys) - min(ys)
+    k = min(820 / (2 * diam), 960 / full_w, 380 / full_h)        # 1 km あたりの画素(天体と国で同じ)
+    R = diam * k / 2                     # 球の半径(画素)
+    RF = 2 * R                           # 広げた円の半径(面積が球の表面と同じ)
+    body_c = (W / 2, 900)                # 広げた円の中心。球もここに描く
+    ctry_c0 = (W / 2, min(H - 330, body_c[1] + RF + 60 + full_h * k / 2))
+    e = math.sqrt(max(0.0, f - 1))       # あふれた分の円の半径(広げた円の半径に対する割合)
+    # 注ぎ終わったら、円(とあふれた分)を同じ倍率で大きく見せる。あふれた分は円の右下の外に置くので、その分も画面に収める
+    ZOOM = max(1.0, min(400.0, (W / 2 - 20) / (0.707 * (1 + e) + e + 0.02)) / RF)
+    pct = round(f * 100)
+
+    lines = {
+        "q": vary(c, "q_space_area", a=bs, b=csay),
+        "lock": vary(c, "lock"),
+        "move": f"Let's flatten all of {bs}'s surface, and pour {csay} in.",
+        "ans": f"{K.cap(bs if body_wins else csay)} is bigger!",
+        "nums": (f"{K.cap(bs)}'s whole surface is about {millions(surf)} square kilometers. "
+                 f"{K.cap(csay)} is about {millions(area)}. And {bs} is only about {bk:,} kilometers across!"),
+        "outro": vary(c, "outro_space_area"),
+    }
+    clips, dur = M.say_all(tts, lines)
+    at = {"q": 0.08}
+    at["lock"] = at["q"] + dur["q"] + 0.4
+    reveal = at["lock"] + dur["lock"] + 1.8
+    at["move"] = reveal + 0.1
+    flat = (at["move"] + 0.2, at["move"] + 1.3)                 # 球を円に広げる
+    move = (flat[1], flat[1] + 1.0)                              # 国を円の上へ
+    pour = (move[1] + 0.1, move[1] + 1.5)                        # 国が溶けて、円を下から満たす
+    zoom = (pour[1], pour[1] + 0.7)
+    at["ans"] = max(zoom[1], at["move"] + dur["move"] + 0.2)
+    at["nums"] = at["ans"] + dur["ans"] + 0.4
+    at["outro"] = at["nums"] + dur["nums"] + 0.6
+    end = at["outro"] + dur["outro"] + TAIL
+    effects = [(M.sfx_whoosh(), 0.0), *M.countdown_ticks(reveal), (M.sfx_whoosh(), flat[0]),
+               (M.sfx_whoosh(), move[0]), (M.sfx_ding(), at["ans"]), (M.sfx_pop(), at["nums"])]
+    wav = out / "audio.wav"
+    M.write_audio(wav, end, clips, at, effects)
+
+    bg = starfield(rng.randrange(1 << 30))
+    disk = body_disk(2 * R, color, rng.randrange(1 << 30))
+    kicker, title, pill_y, timer_y = header("Which one is bigger?", kicker="TRUE SIZE · SPACE")
+    pills = [M.pill(bs_label, color, w=460, dot=True), M.pill(cs, M.MOVER, w=460, dot=True)]
+    win = 0 if body_wins else 1
+    right = M.pill([bs_label, cs][win], [color, M.MOVER][win], w=460, glow=True, dot=True)
+    f_lab, f_sub = M.font(M.SANS_BOLD, 40), M.font(M.SANS, 26)
+    credit = M.text_layer(["Sizes: NASA · Areas: CIA World Factbook · Map: Natural Earth · same scale"],
+                          M.font(M.SANS, 22), (170, 180, 200, 230), shadow=160)
+    h_fill = _fill_height(RF, min(f, 1.0))
+    extra_r = RF * math.sqrt(max(0.0, f - 1))        # あふれた分(面積が同じ円)
+    flat_rgb = tuple(int(v * 0.8) for v in color)
+
+    def tag(d, x, y, name, sub=None):
+        tw = max(d.textlength(name, font=f_lab), d.textlength(sub or "", font=f_sub)) / 2 + 18
+        hgt = 52 if not sub else 84
+        d.rounded_rectangle([x - tw, y - 26, x + tw, y - 26 + hgt], radius=14, fill=(8, 12, 24, 210))
+        d.text((x, y), name, font=f_lab, fill=(255, 255, 255, 255), anchor="mm")
+        if sub:
+            d.text((x, y + 34), sub, font=f_sub, fill=(200, 205, 220, 255), anchor="mm")
+
+    def frame(t):
+        img = bg.copy()
+        uf = M.ease((t - flat[0]) / (flat[1] - flat[0]))
+        if uf < 1:                                                       # 球(だんだん消える)
+            img.alpha_composite(M.with_alpha(disk, 1 - uf),
+                                (int(body_c[0] - disk.width / 2), int(body_c[1] - disk.height / 2)))
+        z = 1 + (ZOOM - 1) * M.ease((t - zoom[0]) / (zoom[1] - zoom[0]))
+        rf = RF * z
+        if uf > 0:                                                       # 広げた円(球から大きくなる)
+            rr = (R + (RF - R) * uf) * z
+            lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+            d = ImageDraw.Draw(lay)
+            d.ellipse([body_c[0] - rr, body_c[1] - rr, body_c[0] + rr, body_c[1] + rr],
+                      fill=flat_rgb + (int(235 * uf),), outline=color + (int(255 * uf),), width=4)
+            up = M.ease((t - pour[0]) / (pour[1] - pour[0]))
+            if up > 0:                                                   # 下から満たす
+                top = body_c[1] + rf - h_fill * z * up
+                mask = Image.new("L", (W, H), 0)
+                ImageDraw.Draw(mask).ellipse([body_c[0] - rf, body_c[1] - rf, body_c[0] + rf, body_c[1] + rf], fill=255)
+                ImageDraw.Draw(mask).rectangle([0, 0, W, top], fill=0)
+                fill = Image.new("RGBA", (W, H), M.MOVER + (230,))
+                lay.paste(fill, (0, 0), mask)
+                if extra_r > 0:                                          # あふれた分
+                    er = extra_r * z * up
+                    dd = (rf + extra_r * z + 12) * 0.707
+                    ex, ey = body_c[0] + dd, body_c[1] + dd
+                    d.ellipse([ex - er, ey - er, ex + er, ey + er], fill=M.MOVER + (230,), outline=(255, 230, 200, 255),
+                              width=3)
+            img.alpha_composite(lay)
+        um = M.ease((t - move[0]) / (move[1] - move[0]))
+        up = M.ease((t - pour[0]) / (pour[1] - pour[0]))
+        if up < 1:                                                       # 国(円の上へ動き、溶けて消える)
+            cx = ctry_c0[0] + (body_c[0] - ctry_c0[0]) * um
+            cy = ctry_c0[1] + (body_c[1] - ctry_c0[1]) * um
+            layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+            d = ImageDraw.Draw(layer)
+            for r in rings:
+                d.polygon([(cx + x * k, cy - y * k) for x, y in r], fill=M.MOVER + (int(255 - 70 * um),),
+                          outline=(255, 230, 200, 255), width=3)
+            img.alpha_composite(M.with_alpha(layer, 1 - up))
+        d = ImageDraw.Draw(img)
+        if uf == 0:
+            tag(d, body_c[0], body_c[1] - R - 74, bs_label, desc)
+            tag(d, ctry_c0[0], ctry_c0[1] - full_h * k / 2 - 45, cs)
+        elif t < at["ans"]:
+            tag(d, body_c[0], body_c[1] - rf - 50, f"All of {bs_label}'s surface, flattened")
+        ra = M.ease((t - at["ans"]) / 0.4)
+        if ra > 0:
+            msg = f"{cs} fills {pct}% of it" if f < 1 else f"{cs} is {pct - 100}% bigger than all of it"
+            lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+            tag(ImageDraw.Draw(lay), body_c[0], body_c[1] - rf - 50, msg)
+            img.alpha_composite(M.with_alpha(lay, ra))
+        rn = M.ease((t - at["nums"]) / 0.4)
+        if rn > 0:
+            lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+            dl = ImageDraw.Draw(lay)
+            y0 = body_c[1] + rf + 80
+            if extra_r:                                                  # あふれた分の円の下へ
+                y0 = max(y0, body_c[1] + (rf + extra_r * z + 12) * 0.707 + extra_r * z + 50)
+            y0 = min(y0, H - 230)
+            for i, (lab, col) in enumerate(((f"{bs_label}  {millions(surf)} km²", color),
+                                            (f"{cs}  {millions(area)} km²", M.MOVER))):
+                yy = y0 + i * 66
+                tw = dl.textlength(lab, font=f_lab) / 2 + 30
+                dl.rounded_rectangle([W / 2 - tw, yy - 28, W / 2 + tw, yy + 28], radius=14, fill=(8, 12, 24, 220))
+                dl.ellipse([W / 2 - tw + 10, yy - 8, W / 2 - tw + 26, yy + 8], fill=col + (255,))
+                dl.text((W / 2 + 8, yy), lab, font=f_lab, fill=(255, 255, 255, 255), anchor="mm")
+            img.alpha_composite(M.with_alpha(lay, rn))
+        sh = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(sh).rectangle([0, 0, W, M.SHADE_TOP], fill=(5, 7, 16, 225))
+        img.alpha_composite(sh)
+        img.alpha_composite(kicker, (0, 110))
+        img.alpha_composite(title, (0, TITLE_Y))
+        rr = M.ease((t - at["ans"]) / 0.3)
+        for i, pl in enumerate(pills):
+            px = 60 + i * 500
+            if i == win and rr > 0:
+                img.alpha_composite(M.with_alpha(pl, 1 - rr), (px, pill_y))
+                img.alpha_composite(M.with_alpha(right, rr), (px, pill_y))
+            else:
+                img.alpha_composite(M.with_alpha(pl, 1 - 0.6 * rr), (px, pill_y))
+        M.timer_bar(img, t, 0.0, reveal, y=timer_y)
+        img.alpha_composite(credit, (0, 1860))
+        return img
+
+    M.render(out / "video.mp4", wav, end, frame)
+    M.save_thumb(frame(reveal - 0.6), out / "site.jpg")
+    winner = bs_label if body_wins else cs
+    return dict(
+        site=dict(question=f"{bs_label}'s whole surface or {cs}: which is bigger?", choices=[bs_label, cs], answer=win,
+                  result=f"{K.cap(winner)} is bigger!",
+                  details=[f"{bs_label} ({desc}): whole surface about {millions(surf)} km² (about {bk:,} km across)",
+                           f"{cs}: about {millions(area)} km² (total area)"]),
+        title=f"Is {bs_label} bigger than {cs}? 🌍",
+        title_vals=dict(body=bs_label, country=cs, body_say=bs),
+        question=f"{bs_label}'s whole surface or {cs} — which one is bigger?",
+        answer=(f"{K.cap(winner)} is bigger: {bs_label}'s whole surface is about {millions(surf)} km², "
+                f"{cs} is about {millions(area)} km² ({cs} {'fills' if f < 1 else 'is'} {pct}% of {bs_label}'s surface)."),
+        countries=[n], tags=[bs_label, cs, "space", "solar system", "surface area"], seconds=end, lines=lines)
+
+
+RENDER = {"compare": compare, "fit": fit, "overlay": overlay, "space": space, "shape": shape, "space_area": space_area}

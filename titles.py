@@ -47,6 +47,12 @@ TITLES = {
         ("guess", "Guess which is wider: {body} or {country}? 🌍"),
         ("true_size", "True size in space: {body} vs {country} 🌍"),
     ],
+    "space_area": [
+        ("really", "Is {body} really bigger than {country}? 🌍"),
+        ("classic", "{body} or {country}: which is bigger? 🌍"),
+        ("surface", "All of {body}'s surface vs {country}: which is bigger? 🌍"),
+        ("cover", "Could {country} cover all of {body_say}? 🌍"),
+    ],
 }
 
 

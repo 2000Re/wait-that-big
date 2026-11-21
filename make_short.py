@@ -38,6 +38,11 @@ MAP_NOTES = [
      "the globe at their true size, so you can compare them fairly. Areas come from the Earth's surface (WGS84), "
      "not from the flat map."),
 ]
+SPACE_AREA_NOTE = ("The planet or moon and the country are drawn at the same scale. The surface area of the planet or "
+                   "moon is calculated from NASA's published mean diameter, treating it as a sphere. The country's area "
+                   "is its total area (land and inland water) from the CIA World Factbook. To compare them, the whole "
+                   "surface is flattened into a disk with exactly the same area. The planet or moon is an illustration, "
+                   "not a photo.")
 LEADS = ["Guess before the reveal! 👀", "Make your guess before the answer! 🌍", "Pause and guess first! 🤔",
          "What's your guess? Watch to the end! 👀"]
 
@@ -82,12 +87,13 @@ def description(info, number, fmt=None, requested=False):
         "",
         f"Answer: {info['answer']}",
         "",
-        SPACE_NOTE if fmt == "space" else MAP_NOTES[number % len(MAP_NOTES)],
+        SPACE_NOTE if fmt == "space" else SPACE_AREA_NOTE if fmt == "space_area" else MAP_NOTES[number % len(MAP_NOTES)],
         "",
         f"More true-size quizzes: {SITE}/",
         "",
         *promo_lines(),
-        "Map data: Natural Earth (public domain)." + (" Sizes: NASA." if fmt == "space" else ""),
+        "Map data: Natural Earth (public domain)." + (" Sizes: NASA." if fmt == "space" else "")
+        + (" Sizes: NASA. Country areas: CIA World Factbook." if fmt == "space_area" else ""),
         "",
         HASHTAGS,
     ])
