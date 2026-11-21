@@ -3,7 +3,9 @@
 毎日 .github/workflows/requests.yml から動く。一覧を見て、出したいものを requests.json に書き足すと、
 次の回から優先して出る(viewer_requests.py)。自動では requests.json に入れない(荒らしや変な組み合わせを避けるため)。
 
-- コメントは YouTube Data API の commentThreads.list で読む(スコープ youtube.readonly。投稿と同じトークン)
+- コメントは YouTube Data API の commentThreads.list で読む。公開のコメントなので API キー(Secret YT_API_KEY。
+  YouTube Data API v3 だけに制限したもの)で読む。投稿用のトークン(youtube.upload・youtube.readonly)では読めない
+  (コメントの読み取りには youtube.force-ssl が要る)
 - その動画に出てきた国は数えない(「グリーンランドって小さいんだ」のような感想を、リクエストと取り違えないため)
 - 公開のリポジトリに残すので、コメントの本文と書いた人の名前は書かない。国の名前と件数、どの回のコメントかだけ
 
@@ -11,6 +13,7 @@
 """
 import argparse
 import json
+import os
 import urllib.error
 import urllib.parse
 from collections import Counter, defaultdict
@@ -29,19 +32,23 @@ THREADS_URL = "https://www.googleapis.com/youtube/v3/commentThreads"
 TZ = ZoneInfo("Asia/Tokyo")
 
 
-def comments(token, video_id, pages=2):
-    """その動画の、上の階層のコメントの本文(返信は含めない)。"""
+def comments(key, video_id, pages=2):
+    """その動画の、上の階層のコメントの本文(返信は含めない)。読めなければ理由を表示して空。"""
     out, page = [], None
     for _ in range(pages):
-        q = {"part": "snippet", "videoId": video_id, "maxResults": 100, "textFormat": "plainText", "order": "time"}
+        q = {"part": "snippet", "videoId": video_id, "maxResults": 100, "textFormat": "plainText", "order": "time",
+             "key": key}
         if page:
             q["pageToken"] = page
         try:
-            res = stats.http(f"{THREADS_URL}?{urllib.parse.urlencode(q)}", headers={"Authorization": f"Bearer {token}"})
+            res = stats.http(f"{THREADS_URL}?{urllib.parse.urlencode(q)}")
         except urllib.error.HTTPError as e:
-            if e.code in (403, 404):            # コメントが無効・動画が消えた
-                return out
-            raise
+            body = e.read().decode(errors="replace")
+            if e.code == 403 and "commentsDisabled" in body:
+                return out                        # この動画はコメントが無効
+            if e.code == 404:
+                return out                        # 動画が消えた
+            raise SystemExit(f"コメントを読めません({video_id}、HTTP {e.code}): {body[:300]}")
         for it in res.get("items", []):
             out.append(it["snippet"]["topLevelComment"]["snippet"].get("textDisplay", ""))
         page = res.get("nextPageToken")
@@ -99,8 +106,10 @@ def main():
     args = ap.parse_args()
     history = json.loads(HISTORY.read_text()) if HISTORY.exists() else []
     recent = [h for h in history if h.get("video_id")][-args.videos:]
-    token = stats.access_token()
-    texts = {h["number"]: comments(token, h["video_id"]) for h in recent}
+    key = os.environ.get("YT_API_KEY")
+    if not key:
+        raise SystemExit("Secret YT_API_KEY がありません(README の「視聴者のリクエスト」)")
+    texts = {h["number"]: comments(key, h["video_id"]) for h in recent}
     print(f"{len(recent)} 本の動画から {sum(len(v) for v in texts.values())} 件のコメントを読みました")
     found = scan(history, texts)
     OUT.write_text(report(found, datetime.now(timezone.utc)))
