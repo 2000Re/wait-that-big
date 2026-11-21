@@ -151,6 +151,7 @@ def main():
         "date": now.date().isoformat(),
         "title": f"[{number}] {title}",
         "title_style": title_style,
+        "ending": "short_tail",        # 最後の間を短くした終わり方(2026-11-21〜。stats.md で比べる)
         "description": description(info, number, c["format"]),
         "localizations": locales.build(c, number, description(info, number, c["format"])),
         "tags": tags(info),
