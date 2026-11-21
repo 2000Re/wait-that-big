@@ -43,10 +43,11 @@ LEADS = ["Guess before the reveal! 👀", "Make your guess before the answer! �
 
 
 HERE = Path(__file__).resolve().parent
-# 姉妹チャンネル(説明欄の最後で紹介する)。閉じる予定の Too Close to Tell は入れない
+# 姉妹チャンネル(説明欄の最後で紹介する)
 SISTERS = [
     ("🎨 Painted When? — guess the year a famous painting was made", "https://www.youtube.com/@painted-when"),
     ("🛰️ Guess From Space — name famous places from satellite images", "https://www.youtube.com/@guess-from-space"),
+    ("🔍 Too Close to Tell — guess the museum object from an extreme close-up", "https://www.youtube.com/@too-close-to-tell"),
 ]
 
 

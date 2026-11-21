@@ -10,8 +10,8 @@ YouTube チャンネル **Wait, That Big?**([@wait-that-big](https://www.youtube
 何個入る？(fit)は2回ずつ(2026-11-21 の再生数の平均が overlay 2,237・fit 1,839・compare 1,473・space 1,358・shape 1,302
 だったため)。#14 までは compare → fit → overlay → space → shape の順に1回ずつ回していた。
 
-説明欄の終わりには、最新の通常動画「True Size Challenge」へのリンクと、姉妹チャンネル(Painted When?・Guess From Space)
-へのリンクを入れる(上級者向け機能でリンクがクリックできるようになったため。閉じる予定の Too Close to Tell は入れない)。
+説明欄の終わりには、最新の通常動画「True Size Challenge」へのリンクと、姉妹チャンネル(Painted When?・Guess From Space・Too Close to Tell)
+へのリンクを入れる(上級者向け機能でリンクがクリックできるようになったため。2026-11-21 から Too Close to Tell も入れた)。
 
 | 形式 | 内容 | 例 |
 |---|---|---|
