@@ -58,6 +58,8 @@ def vary(c, key, **kw):
     opts = LINES[key]
     n = c.get("number", 1) + sum(map(ord, key))
     t = opts[n % len(opts)].format(**kw)
+    if key.startswith("q_") and c.get("requested"):
+        t = "You asked for this one! " + t        # 視聴者のリクエストの回(viewer_requests.py)
     return t[:1].upper() + t[1:]
 
 

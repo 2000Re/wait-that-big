@@ -182,6 +182,18 @@ def main():
     })
     history_path.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n")
 
+    # 視聴者のリクエストの回なら、requests.json に済みと書く(viewer_requests.py。ここは標準ライブラリだけで書く)
+    if meta.get("request_id") is not None:
+        rp = Path(__file__).parent / "requests.json"
+        try:
+            reqs = json.loads(rp.read_text() or "[]")
+            for r in reqs:
+                if r.get("id") == meta["request_id"]:
+                    r["done"], r["video_id"] = meta["number"], video_id
+            rp.write_text(json.dumps(reqs, ensure_ascii=False, indent=2) + "\n")
+        except (OSError, ValueError) as e:
+            print(f"警告: requests.json を更新できませんでした: {e}", file=sys.stderr)
+
     # サイト(docs/)に回のページを足す。失敗しても投稿の記録は残す(記録がないと同じお題をまた選んでしまう)
     if meta.get("site"):
         try:
