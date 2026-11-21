@@ -182,6 +182,10 @@ def main():
     })
     history_path.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n")
 
+    # 合う再生リストに入れる(playlists.py・playlist_rules.py)。失敗しても投稿は止めない
+    import playlists
+    playlists.add_after_upload(token, history[-1])
+
     # 視聴者のリクエストの回なら、requests.json に済みと書く(viewer_requests.py。ここは標準ライブラリだけで書く)
     if meta.get("request_id") is not None:
         rp = Path(__file__).parent / "requests.json"

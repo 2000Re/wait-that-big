@@ -648,6 +648,8 @@ def upload(args):
         "uploaded_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     })
     hist_path.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n")
+    import playlists                       # 「True Size Challenge」の再生リストへ(失敗しても投稿は止めない)
+    playlists.add_after_upload(token, history[-1])
 
 
 def main():
