@@ -372,6 +372,8 @@ def choose(fmt, history, seed, top=40, recent=4):
     regions = {r[0] for r in REGIONS}          # 行き先の地域は4つしかないので、この条件の対象にしない
     avoid |= {n for n, k in seen.items() if k >= OFTEN_MAX and n not in regions}
     cands = [c for c in CANDIDATES[fmt]() if c["key"] not in used]
+    if fmt == "space_area":         # お題が4つしかないので、AREA_PAIRS の順に出す(最初は冥王星とロシア)
+        return cands[0] if cands else None
     cands.sort(key=lambda c: -c["score"])
     fresh = [c for c in cands if not countries_of(c) & avoid] or cands
     if not fresh:
