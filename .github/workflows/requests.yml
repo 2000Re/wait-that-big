@@ -1,0 +1,45 @@
+name: requests
+
+# 毎日1回、最近の動画のコメントから国の名前を拾い、requests_candidates.md(リクエストの候補)を作り直す。
+# 投稿そのものではないので、数時間遅れてもかまわない GitHub の schedule で動かす(時刻は UTC。07:41 JST ごろ)
+on:
+  schedule:
+    - cron: "41 22 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: requests
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Scan comments
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: python scan_requests.py
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add requests_candidates.md
+          git diff --cached --quiet && exit 0
+          git commit -m "Update request candidates"
+          for i in 1 2 3 4; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME" && exit 0
+            sleep $((2 ** i))
+          done
+          exit 1

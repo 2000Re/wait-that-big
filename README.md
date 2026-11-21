@@ -50,6 +50,7 @@ YouTube が翻訳を受け付けなかったとき(400・403)は、翻訳なし�
 | ファイル | 役割 |
 |---|---|
 | `longform.py` | 通常動画(横長)「True Size Challenge」を作り、投稿する(下の「通常動画」) |
+| `viewer_requests.py`・`scan_requests.py` | 視聴者のリクエスト(下の「視聴者のリクエスト」) |
 | `make_short.py` | 次のお題を選び、動画(`out/video.mp4`)と `out/meta.json` を作る |
 | `catalog.py` | 国の一覧、お題の候補、選び方 |
 | `episodes.py` | 3つの形式の画面と声 |
@@ -188,3 +189,26 @@ YouTube のチャンネルは Painted When? と同じ Google アカウント(ブ
 Shorts は最後まで見られると頭からくり返される。くり返し再生につなげやすいよう、最後の読み上げのあとの間を短くした
 (Painted When?・Guess From Space は、最後に冒頭と同じ拡大した場面へ戻る)。どちらの終わり方かは
 `upload_history.json` の `ending` に残り、`stats.md` で比べられる。
+
+## 視聴者のリクエスト(2026-11-21〜)
+
+最後の一言で「次はどの国？」と聞いているので、コメントでリクエストが来る。それを次の回のお題にする。
+
+1. **候補を見る**: `.github/workflows/requests.yml` が毎日(07:41 JST ごろ)`scan_requests.py` を動かし、最近30本の
+   コメントから国の名前を拾って [`requests_candidates.md`](requests_candidates.md) を作り直す。その動画に出てきた国は数えない。
+   公開のリポジトリなので、コメントの本文と書いた人の名前は残さない(国の名前・件数・どの回か・出せる形式だけ)
+2. **出すものを選ぶ**: `requests.json` に書き足す(GitHub の画面で編集してよい)。例:
+   ```json
+   [
+     {"id": 1, "countries": ["Australia", "Japan"], "format": null, "note": "#13 のコメント", "added": "2026-11-21"}
+   ]
+   ```
+   `id` は重ならない番号。`format` は形式を決めたいときだけ(compare / fit / overlay / space / shape)
+3. **出る**: その回の形式で出せるリクエストがあれば、ふつうの選び方より先に出す(`viewer_requests.py`)。読み上げの最初に
+   「You asked for this one!」、説明の最初に「Requested in the comments」と入る。投稿すると `youtube_upload.py` が
+   `done`(回の番号)と `video_id` を書き足す
+
+- 2か国の compare・fit は、ふだんの候補になくても、その2か国で作る(面積の差が5%未満の組み合わせは「何倍」と言えないので出さない。
+  例: 日本とドイツ)
+- 主役にできない国(国境に争いのある国・地域、遠くに海外領土があるアメリカ・フランスなど)は出せない。`requests_candidates.md` の
+  「出せる形式」が空になる

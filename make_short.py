@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo
 
 import catalog as K
 import episodes as E
+import viewer_requests as R
 import locales
 import media as M
 import titles
@@ -71,8 +72,9 @@ def promo_lines():
     return out
 
 
-def description(info, number, fmt=None):
+def description(info, number, fmt=None, requested=False):
     return "\n".join([
+        *(["🙌 Requested in the comments — thanks for the idea!", ""] if requested else []),
         info["question"],
         "",
         LEADS[number % len(LEADS)],
@@ -123,10 +125,19 @@ def main():
     tts = M.make_tts(args.tts)
 
     tried = []
+    req = c_req = None
+    if not args.key and args.format == "auto":
+        c_req, req = R.pick(fmt, history)
+        if c_req:
+            print(f"リクエスト #{req['id']}: {req['countries']} → {c_req['key']}")
     for _ in range(6):
         if args.key:
             c = find(args.key)
+        elif req and c_req["key"] not in tried:
+            c = c_req
+            c["requested"] = True                 # 読み上げに「You asked for this one!」(episodes.vary)
         else:
+            req = None
             c = K.choose(fmt, history + [{"key": k} for k in tried], f"{now.date()}:{number}:{len(tried)}")
             if c is None:
                 raise SystemExit(f"{fmt} の出せるお題がもうありません")
@@ -152,8 +163,9 @@ def main():
         "title": f"[{number}] {title}",
         "title_style": title_style,
         "ending": "short_tail",        # 最後の間を短くした終わり方(2026-11-21〜。stats.md で比べる)
-        "description": description(info, number, c["format"]),
-        "localizations": locales.build(c, number, description(info, number, c["format"])),
+        "description": description(info, number, c["format"], bool(req)),
+        "localizations": locales.build(c, number, description(info, number, c["format"], bool(req))),
+        "request_id": req["id"] if req else None,
         "tags": tags(info),
         "answer": info["answer"],
         "video": "video.mp4",
