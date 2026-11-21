@@ -236,3 +236,15 @@ Shorts は最後まで見られると頭からくり返される。くり返し�
   同じ縮尺の国(正積の図法)をその上へ動かし、溶かして円を下から満たす。足りなければ埋まった割合、
   あふれれば、あふれた分を同じ面積の小さな円で右下に出す
 - 「ロシアの東西は約9,000km」のような幅の数字は、測り方で大きく変わるので使わない
+
+## 再生リスト(2026-11-22〜、`playlists.py`・`playlist_rules.py`)
+
+投稿するたびに、合う再生リストへ自動で入れる(なければ公開で作る)。どの再生リストに入れるかは `playlist_rules.py`。
+`python playlists.py --show` で、これまでの回がどこに入るかを確かめられる(通信なし)。
+
+- 再生リストの操作には、リフレッシュトークンに `youtube` スコープが要る(`get_youtube_refresh_token.py` に追加済み)。
+  権限のないトークンのままでも投稿は止まらず、ログに警告が出るだけ
+- 取り直し: Google Cloud Console の OAuth 同意画面(データアクセス)に `.../auth/youtube` を足してから、
+  `python get_youtube_refresh_token.py client_secret.json` を実行し、Secrets の `YT_REFRESH_TOKEN` を新しい値にする
+- これまでの動画は、Actions の「playlists」を手動で1回動かすとまとめて入る(入っている動画は入れ直さない)
+- `playlists.py` と `.github/workflows/playlists.yml` は4チャンネルで同じファイル(`sync_check.py` で確かめる)
