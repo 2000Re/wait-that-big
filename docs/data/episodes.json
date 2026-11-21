@@ -276,5 +276,26 @@
    "About 3,300 km from end to end"
   ],
   "image": "img/15-what-if-mexico-were-in-south-america.jpg"
+ },
+ {
+  "number": 16,
+  "slug": "16-how-many-italys-fit-inside-canada",
+  "format": "fit",
+  "video_id": "lrHMN5VP-v4",
+  "uploaded_at": "2026-11-21T03:25:19+00:00",
+  "question": "How many Italys fit inside Canada?",
+  "choices": [
+   "16",
+   "33",
+   "59"
+  ],
+  "answer": 1,
+  "result": "About 33 Italys!",
+  "details": [
+   "Canada: 9.92 million km²",
+   "Italy: 301,000 km²",
+   "9.92 million km² ÷ 301,000 km² ≈ 33"
+  ],
+  "image": "img/16-how-many-italys-fit-inside-canada.jpg"
  }
 ]
