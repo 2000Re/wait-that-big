@@ -37,6 +37,13 @@ TITLES = {
         "de": "Welches Land ({continent}) hat diese Form? 🌍",
         "pt": "Que país ({continent}) tem esta forma? 🌍",
     },
+    "space_area": {
+        "ja": "{body}の表面全体と{country}、広いのはどっち？🌍",
+        "es": "Toda la superficie de {body} o {country}: ¿cuál es más grande? 🌍",
+        "fr": "Toute la surface de {body} ou {country} : lequel est le plus grand ? 🌍",
+        "de": "Die ganze Oberfläche von {body} oder {country}: Was ist größer? 🌍",
+        "pt": "Toda a superfície de {body} ou {country}: qual é maior? 🌍",
+    },
     "space": {
         "ja": "{body}と{country}、幅が広いのはどっち？🌍",
         "es": "{body} o {country}: ¿cuál es más ancho? 🌍",
@@ -119,7 +126,7 @@ def build(c, number, description_en):
                 vals = dict(m=country(c["mover"], lang), region=REGIONS[c["region"]][lang])
             elif fmt == "shape":
                 vals = dict(continent=CONTINENTS[geo.feature(c["country"])["properties"]["CONTINENT"]][lang])
-            elif fmt == "space":
+            elif fmt in ("space", "space_area"):
                 vals = dict(body=BODIES[c["body"]][lang], country=country(c["country"], lang))
             else:
                 continue
