@@ -27,9 +27,7 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Scan comments
         env:
-          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
-          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
         run: python scan_requests.py
       - name: Commit
         run: |
