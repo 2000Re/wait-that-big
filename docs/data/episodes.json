@@ -297,5 +297,24 @@
    "9.92 million km² ÷ 301,000 km² ≈ 33"
   ],
   "image": "img/16-how-many-italys-fit-inside-canada.jpg"
+ },
+ {
+  "number": 17,
+  "slug": "17-canada-or-russia-which-is-bigger",
+  "format": "compare",
+  "video_id": "ig3ZTUk7umM",
+  "uploaded_at": "2026-11-22T00:25:21+00:00",
+  "question": "Canada or Russia: which is bigger?",
+  "choices": [
+   "Canada",
+   "Russia"
+  ],
+  "answer": 1,
+  "result": "Russia is about 1.7× bigger!",
+  "details": [
+   "Russia: 16.97 million km²",
+   "Canada: 9.92 million km²"
+  ],
+  "image": "img/17-canada-or-russia-which-is-bigger.jpg"
  }
 ]

@@ -249,5 +249,22 @@
     "video_id": "lrHMN5VP-v4",
     "privacy": "public",
     "uploaded_at": "2026-11-21T03:25:19+00:00"
+  },
+  {
+    "number": 17,
+    "key": "compare:Canada|Russia",
+    "format": "compare",
+    "countries": [
+      "Canada",
+      "Russia"
+    ],
+    "date": "2026-11-22",
+    "title": "[17] Canada or Russia? Your map might be lying 🌍",
+    "title_style": "compare_lying",
+    "ending": "short_tail",
+    "answer": "Russia is about 1.7× bigger (16.97 million km² vs 9.92 million km²).",
+    "video_id": "ig3ZTUk7umM",
+    "privacy": "public",
+    "uploaded_at": "2026-11-22T00:25:21+00:00"
   }
 ]
