@@ -316,5 +316,20 @@
    "Canada: 9.92 million km²"
   ],
   "image": "img/17-canada-or-russia-which-is-bigger.jpg"
+ },
+ {
+  "number": 18,
+  "slug": "18-what-if-mexico-were-in-europe",
+  "format": "overlay",
+  "video_id": "rPldw7vfqVw",
+  "uploaded_at": "2026-11-22T03:24:58+00:00",
+  "question": "What if Mexico were in Europe?",
+  "choices": [],
+  "answer": null,
+  "result": "Mexico would stretch from Ireland to Turkey.",
+  "details": [
+   "About 3,300 km from end to end"
+  ],
+  "image": "img/18-what-if-mexico-were-in-europe.jpg"
  }
 ]
