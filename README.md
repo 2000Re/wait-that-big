@@ -248,3 +248,16 @@ Shorts は最後まで見られると頭からくり返される。くり返し�
   `python get_youtube_refresh_token.py client_secret.json` を実行し、Secrets の `YT_REFRESH_TOKEN` を新しい値にする
 - これまでの動画は、Actions の「playlists」を手動で1回動かすとまとめて入る(入っている動画は入れ直さない)
 - `playlists.py` と `.github/workflows/playlists.yml` は4チャンネルで同じファイル(`sync_check.py` で確かめる)
+
+## 投稿時刻(2026-11-23〜)
+
+4チャンネルで1日8本を3時間おきに割り振った(各チャンネルの2本は12時間離す。予備は30分後。タイムゾーン Asia/Tokyo):
+
+| チャンネル | 投稿 | cron 式 |
+|---|---|---|
+| Painted When? | 1:17・13:17 | `17,47 1,13 * * *` |
+| Too Close to Tell | 4:08・16:08 | `08,38 4,16 * * *` |
+| Guess From Space | 7:04・19:04 | `04,34 7,19 * * *` |
+| Wait, That Big? | 10:23・22:23 | `23,53 10,22 * * *` |
+
+上に書かれた以前の時刻は経緯として残している。先の回が成功していれば、予備の回は posted_today.py が止める。
