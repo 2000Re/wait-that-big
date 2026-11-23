@@ -64,5 +64,25 @@
     "format": null,
     "note": "#3 のコメント",
     "added": "2026-11-21"
+  },
+  {
+    "id": 7,
+    "countries": [
+      "Indonesia",
+      "Mexico"
+    ],
+    "format": null,
+    "note": "#13・#17 のコメント",
+    "added": "2026-11-24"
+  },
+  {
+    "id": 8,
+    "countries": [
+      "Japan",
+      "Vietnam"
+    ],
+    "format": null,
+    "note": "#18 のコメント",
+    "added": "2026-11-24"
   }
 ]
