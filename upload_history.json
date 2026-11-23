@@ -301,5 +301,21 @@
     "video_id": "4ugozYe5xJw",
     "privacy": "public",
     "uploaded_at": "2026-11-23T00:27:00+00:00"
+  },
+  {
+    "number": 20,
+    "key": "space_area:Pluto|Russia",
+    "format": "space_area",
+    "countries": [
+      "Russia"
+    ],
+    "date": "2026-11-23",
+    "title": "[20] Is Pluto really bigger than Russia? 🌍",
+    "title_style": "space_area_really",
+    "ending": "short_tail",
+    "answer": "Pluto is bigger: Pluto's whole surface is about 17.7 million km², Russia is about 17.1 million km² (Russia fills 96% of Pluto's surface).",
+    "video_id": "8Ucf1t1Opz0",
+    "privacy": "public",
+    "uploaded_at": "2026-11-23T03:25:20+00:00"
   }
 ]

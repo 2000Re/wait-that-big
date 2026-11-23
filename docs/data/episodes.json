@@ -352,5 +352,24 @@
    "8.47 million km² ÷ 66,000 km² ≈ 129"
   ],
   "image": "img/19-how-many-sri-lankas-fit-inside-brazil.jpg"
+ },
+ {
+  "number": 20,
+  "slug": "20-pluto-s-whole-surface-or-russia-which-is-bigger",
+  "format": "space_area",
+  "video_id": "8Ucf1t1Opz0",
+  "uploaded_at": "2026-11-23T03:25:20+00:00",
+  "question": "Pluto's whole surface or Russia: which is bigger?",
+  "choices": [
+   "Pluto",
+   "Russia"
+  ],
+  "answer": 0,
+  "result": "Pluto is bigger!",
+  "details": [
+   "Pluto (a dwarf planet): whole surface about 17.7 million km² (about 2,400 km across)",
+   "Russia: about 17.1 million km² (total area)"
+  ],
+  "image": "img/20-pluto-s-whole-surface-or-russia-which-is-bigger.jpg"
  }
 ]
