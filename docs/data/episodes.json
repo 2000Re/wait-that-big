@@ -331,5 +331,26 @@
    "About 3,300 km from end to end"
   ],
   "image": "img/18-what-if-mexico-were-in-europe.jpg"
+ },
+ {
+  "number": 19,
+  "slug": "19-how-many-sri-lankas-fit-inside-brazil",
+  "format": "fit",
+  "video_id": "4ugozYe5xJw",
+  "uploaded_at": "2026-11-23T00:27:00+00:00",
+  "question": "How many Sri Lankas fit inside Brazil?",
+  "choices": [
+   "64",
+   "129",
+   "232"
+  ],
+  "answer": 1,
+  "result": "About 129 Sri Lankas!",
+  "details": [
+   "Brazil: 8.47 million km²",
+   "Sri Lanka: 66,000 km²",
+   "8.47 million km² ÷ 66,000 km² ≈ 129"
+  ],
+  "image": "img/19-how-many-sri-lankas-fit-inside-brazil.jpg"
  }
 ]
