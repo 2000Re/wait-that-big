@@ -333,5 +333,23 @@
     "video_id": "LONjkoLLbv8",
     "privacy": "public",
     "uploaded_at": "2026-11-24T01:24:39+00:00"
+  },
+  {
+    "number": 22,
+    "key": "fit:Mongolia|Vietnam",
+    "format": "fit",
+    "countries": [
+      "Mongolia",
+      "Vietnam"
+    ],
+    "date": "2026-11-24",
+    "title": "[22] How many Vietnams fit in Mongolia? 🌍",
+    "title_style": "fit_classic",
+    "ending": "short_tail",
+    "teaser": 2,
+    "answer": "About 5 (by area: Mongolia 1.56 million km² ÷ Vietnam 328,000 km²).",
+    "video_id": "ddi3lqv5VCE",
+    "privacy": "public",
+    "uploaded_at": "2026-11-24T12:25:14+00:00"
   }
 ]

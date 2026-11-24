@@ -391,5 +391,26 @@
    "About the same size as Finland"
   ],
   "image": "img/21-which-country-is-this.jpg"
+ },
+ {
+  "number": 22,
+  "slug": "22-how-many-vietnams-fit-inside-mongolia",
+  "format": "fit",
+  "video_id": "ddi3lqv5VCE",
+  "uploaded_at": "2026-11-24T12:25:14+00:00",
+  "question": "How many Vietnams fit inside Mongolia?",
+  "choices": [
+   "2",
+   "3",
+   "5"
+  ],
+  "answer": 2,
+  "result": "About 5 Vietnams!",
+  "details": [
+   "Mongolia: 1.56 million km²",
+   "Vietnam: 328,000 km²",
+   "1.56 million km² ÷ 328,000 km² ≈ 5"
+  ],
+  "image": "img/22-how-many-vietnams-fit-inside-mongolia.jpg"
  }
 ]
