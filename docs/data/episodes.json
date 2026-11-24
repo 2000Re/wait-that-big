@@ -371,5 +371,25 @@
    "Russia: about 17.1 million km² (total area)"
   ],
   "image": "img/20-pluto-s-whole-surface-or-russia-which-is-bigger.jpg"
+ },
+ {
+  "number": 21,
+  "slug": "21-which-country-is-this",
+  "format": "shape",
+  "video_id": "LONjkoLLbv8",
+  "uploaded_at": "2026-11-24T01:24:39+00:00",
+  "question": "Which country is this?",
+  "choices": [
+   "Japan",
+   "Turkey",
+   "Vietnam"
+  ],
+  "answer": 2,
+  "result": "It's Vietnam!",
+  "details": [
+   "Vietnam: 328,000 km²",
+   "About the same size as Finland"
+  ],
+  "image": "img/21-which-country-is-this.jpg"
  }
 ]

@@ -317,5 +317,21 @@
     "video_id": "8Ucf1t1Opz0",
     "privacy": "public",
     "uploaded_at": "2026-11-23T03:25:20+00:00"
+  },
+  {
+    "number": 21,
+    "key": "shape:Vietnam",
+    "format": "shape",
+    "countries": [
+      "Vietnam"
+    ],
+    "date": "2026-11-24",
+    "title": "[21] Which country in Asia has this shape? 🌍",
+    "title_style": "shape_continent",
+    "ending": "short_tail",
+    "answer": "Vietnam. It's about the same size as Finland (328,000 km²).",
+    "video_id": "LONjkoLLbv8",
+    "privacy": "public",
+    "uploaded_at": "2026-11-24T01:24:39+00:00"
   }
 ]
