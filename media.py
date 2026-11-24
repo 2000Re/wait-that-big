@@ -322,8 +322,14 @@ def save_thumb(img, path, width=360):
     img.convert("RGB").crop(box).resize((width, width * 4 // 3), Image.LANCZOS).save(path, quality=80)
 
 
+OVERLAY = None      # (img, t, end) -> img。予告編の回(make_short.teaser_plan)で、最後に通常動画への案内を重ねる
+
+
 def render(mp4, wav, end, frame_at):
-    """frame_at(t) が返す RGBA 画像を並べて、音と一緒に mp4 にする。"""
+    """frame_at(t) が返す RGBA 画像を並べて、音と一緒に mp4 にする。OVERLAY があれば各コマに重ねる。"""
+    if OVERLAY is not None:
+        inner = frame_at
+        frame_at = lambda t: OVERLAY(inner(t), t, end)  # noqa: E731
     p = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
                           "-r", str(FPS), "-i", "-", "-i", str(wav), "-map", "0:v", "-map", "1:a", "-shortest",
                           "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
