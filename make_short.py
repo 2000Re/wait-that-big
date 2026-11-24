@@ -63,6 +63,9 @@ def latest_long():
         hist = json.loads(p.read_text() or "[]")       # 限定公開で上げた回も、あとで公開にしている前提
     except (OSError, ValueError):
         return None
+    now = datetime.now().astimezone()
+    hist = [h for h in hist if h.get("video_id")                         # 予約投稿で、まだ公開前の回は出さない
+            and (not h.get("publish_at") or datetime.fromisoformat(h["publish_at"].replace("Z", "+00:00")) <= now)]
     if not hist:
         return None
     h = max(hist, key=lambda x: x["number"])
@@ -87,7 +90,8 @@ def teaser_plan(history, now=None):
     lg = max(hist, key=lambda x: x["number"])
     if any(h.get("teaser") == lg["number"] for h in history):
         return None
-    if (now - datetime.fromisoformat(lg["uploaded_at"])).total_seconds() > TEASER_DAYS * 86400:
+    start = datetime.fromisoformat((lg.get("publish_at") or lg["uploaded_at"]).replace("Z", "+00:00"))     # 予約投稿なら公開の時刻から
+    if now < start or (now - start).total_seconds() > TEASER_DAYS * 86400:
         return None
     keys = lg["keys"]
     order = sorted(range(len(keys)), key=lambda i: (not keys[i].startswith("fit:"), i < 2, i))   # 最初の2問は避ける
