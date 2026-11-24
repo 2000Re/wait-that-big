@@ -342,10 +342,13 @@ def next_format(history):
         if fmt == last:
             fmt = CYCLE[(number - CYCLE_START + 1) % len(CYCLE)]
         if fmt == "space":
-            # 宇宙の回は、幅比べ(space)と面積比べ(space_area)を交互に。面積比べのお題が残っていなければ幅比べ
-            prev = next((h.get("format") for h in reversed(history) if h.get("format") in ("space", "space_area")), None)
+            # 宇宙の回は14本に1本(CYCLE を2周するうちの1回だけ。もう1回は重ねてみる)。2026-11-24 に変更:
+            # 宇宙の3本(1日目 1,043〜1,398)が全体の平均 1,902 を3〜4割下回り、平均視聴割合も 80% 前後と一番低かったため
+            if (number - CYCLE_START) // len(CYCLE) % 2 == 1:
+                return "overlay"
+            # 面積比べ(space_area)の残りを先に出す。出し終えたら幅比べ(space)
             used = {h.get("key") for h in history}
-            if prev == "space" and any(c["key"] not in used for c in space_area_candidates()):
+            if any(c["key"] not in used for c in space_area_candidates()):
                 fmt = "space_area"
         return fmt
     last = next((h.get("format") for h in reversed(history) if h.get("format") in FORMATS), None)
