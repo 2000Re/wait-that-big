@@ -69,6 +69,57 @@ def latest_long():
     return h["number"], f"https://youtu.be/{h['video_id']}"
 
 
+TEASER_DAYS = 3        # 通常動画を投稿してからこの日数のうちに、予告編の Short を1本出す
+
+
+def teaser_plan(history, now=None):
+    """(通常動画の番号, URL, お題, 何問目, 問題の数) か None。
+    いちばん新しい通常動画を投稿してから TEASER_DAYS 日以内で、まだ予告編を出していなければ、その動画の問題から
+    1問(反応のよい「何個入る？」を優先)を選ぶ。その1問は答えまで見せ、最後に「残りは通常動画で」と誘う。"""
+    now = now or datetime.now(TZ)
+    try:
+        hist = json.loads((HERE / "longform_history.json").read_text() or "[]")
+    except (OSError, ValueError):
+        return None
+    hist = [h for h in hist if h.get("video_id")]
+    if not hist:
+        return None
+    lg = max(hist, key=lambda x: x["number"])
+    if any(h.get("teaser") == lg["number"] for h in history):
+        return None
+    if (now - datetime.fromisoformat(lg["uploaded_at"])).total_seconds() > TEASER_DAYS * 86400:
+        return None
+    keys = lg["keys"]
+    order = sorted(range(len(keys)), key=lambda i: (not keys[i].startswith("fit:"), i < 2, i))   # 最初の2問は避ける
+    used = {h["key"] for h in history}
+    for i in order:
+        if keys[i] not in used:
+            return lg["number"], f"https://youtu.be/{lg['video_id']}", keys[i], i + 1, len(keys)
+    return None
+
+
+def teaser_overlay(n_long, round_no, total):
+    """最後の約2.5秒に重ねる帯「Round 5 of 12 · True Size Challenge #2 / Play all 12 rounds!」。"""
+    from PIL import Image, ImageDraw
+    l1 = M.text_layer([f"Round {round_no} of {total} · True Size Challenge #{n_long}"], M.font(M.SANS_BOLD, 40),
+                      M.WHITE, shadow=230)
+    l2 = M.text_layer([f"Play all {total} rounds!"], M.font(M.SANS_BOLD, 64), M.GOLD + (255,), shadow=230)
+    y0 = 105                     # 上の問いと選択肢の上に重ねる(下は YouTube のボタンや答えの帯と重なるため)
+    hgt = l1.height + l2.height + 40
+    band = Image.new("RGBA", (M.W, hgt), (0, 0, 0, 0))
+    ImageDraw.Draw(band).rounded_rectangle([40, 0, M.W - 40, hgt], radius=28, fill=(8, 12, 24, 230),
+                                           outline=M.GOLD + (220,), width=4)
+    band.alpha_composite(l1, (0, 14))
+    band.alpha_composite(l2, (0, 14 + l1.height))
+
+    def overlay(img, t, end):
+        a = M.ease((t - (end - 2.6)) / 0.4)
+        if a > 0:
+            img.alpha_composite(M.with_alpha(band, a), (0, y0))
+        return img
+    return overlay
+
+
 def promo_lines():
     out = []
     lg = latest_long()
@@ -78,8 +129,10 @@ def promo_lines():
     return out
 
 
-def description(info, number, fmt=None, requested=False):
+def description(info, number, fmt=None, requested=False, teaser=None):
     return "\n".join([
+        *([f"▶️ This is round {teaser[3]} of True Size Challenge #{teaser[0]}. Play all {teaser[4]} rounds: {teaser[1]}",
+           ""] if teaser else []),
         *(["🙌 Requested in the comments — thanks for the idea!", ""] if requested else []),
         info["question"],
         "",
@@ -133,6 +186,13 @@ def main():
 
     tried = []
     req = c_req = None
+    teaser = teaser_plan(history, now) if not args.key and args.format == "auto" else None
+    if teaser:
+        # 通常動画の予告編の回(週1本): 通常動画の1問を、いつもの Shorts と同じ形で出し、最後に通常動画へ誘う
+        print(f"予告編: True Size Challenge #{teaser[0]} の {teaser[3]}問目 → {teaser[2]}")
+        args.key = teaser[2]
+        rest = teaser[4] - 1
+        M.OVERLAY = teaser_overlay(teaser[0], teaser[3], teaser[4])
     if not args.key and args.format == "auto":
         c_req, req = R.pick(fmt, history)
         if c_req:
@@ -150,11 +210,19 @@ def main():
                 raise SystemExit(f"{fmt} の出せるお題がもうありません")
         print("お題:", c["key"])
         c["number"] = number                      # 言い回しを番号で回す(episodes.vary)
+        if teaser:
+            c["teaser"] = {"outro": f"That was round {teaser[3]}. Want {rest} more? Tap the link to play the full "
+                                    "challenge!"}
         info = E.RENDER[c["format"]](c, tts, out, rng)
         if info:
             break
         print("  このお題は成り立たないので、別のお題にします")
         tried.append(c["key"])
+        if teaser:                                # 予告編のお題が作れなければ、ふつうの回にする(投稿は止めない)
+            print("  予告編をやめて、ふつうの回にします")
+            teaser, args.key, M.OVERLAY = None, None, None
+            c.pop("teaser", None)
+            continue
         if args.key:
             raise SystemExit("指定のお題は作れませんでした")
     else:
@@ -170,9 +238,10 @@ def main():
         "title": f"[{number}] {title}",
         "title_style": title_style,
         "ending": "short_tail",        # 最後の間を短くした終わり方(2026-11-21〜。stats.md で比べる)
-        "description": description(info, number, c["format"], bool(req)),
-        "localizations": locales.build(c, number, description(info, number, c["format"], bool(req))),
+        "description": description(info, number, c["format"], bool(req), teaser),
+        "localizations": locales.build(c, number, description(info, number, c["format"], bool(req), teaser)),
         "request_id": req["id"] if req else None,
+        "teaser": teaser[0] if teaser else None,     # 予告編の回なら、通常動画の番号(teaser_plan が二度出さないため)
         "tags": tags(info),
         "answer": info["answer"],
         "video": "video.mp4",

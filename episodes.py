@@ -59,6 +59,8 @@ LINES = {
 
 def vary(c, key, **kw):
     """番号で言い回しを回す(同じ番号なら作り直しても同じ)。役ごとに周期をずらす。"""
+    if key.startswith("outro_") and c.get("teaser"):
+        return c["teaser"]["outro"]              # 予告編の回(make_short.teaser_plan): 通常動画へ誘う
     opts = LINES[key]
     n = c.get("number", 1) + sum(map(ord, key))
     t = opts[n % len(opts)].format(**kw)

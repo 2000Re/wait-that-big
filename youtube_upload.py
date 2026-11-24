@@ -175,6 +175,7 @@ def main():
         "title": meta["title"],
         "title_style": meta.get("title_style"),
         "ending": meta.get("ending"),
+        "teaser": meta.get("teaser"),
         "answer": meta["answer"],
         "video_id": video_id,
         "privacy": actual_privacy,
