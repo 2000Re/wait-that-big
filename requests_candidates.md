@@ -1,6 +1,6 @@
 # リクエストの候補(コメントから)
 
-`scan_requests.py` が毎日作り直す(最終更新 2026-11-24 15:23 JST)。
+`scan_requests.py` が毎日作り直す(最終更新 2026-11-25 14:02 JST)。
 最近の動画のコメントに出てきた国の名前(その動画に出てきた国は除く)。出したいものを `requests.json` に書き足すと、
 次の回から優先して出る。「出せる形式」が空のものは出せない(国境に争いのある国・地域、遠くに海外領土がある国など)。
 コメントの本文と書いた人の名前は、ここには残さない。
@@ -18,7 +18,7 @@
 | Canada + Italy | 1 | #2 | compare | 済み |
 | Canada + Russia | 1 | #5 |  | 済み |
 | China | 1 | #6 | compare, fit, space |  |
-| Cuba + United Kingdom | 1 | #13 | compare, fit | 済み |
+| Cuba + United Kingdom | 1 | #13 | fit | 済み |
 | Germany | 1 | #15 | compare, fit, space, shape |  |
 | Indonesia | 1 | #18 | compare, overlay, shape |  |
 | Indonesia + United States of America | 1 | #15 |  |  |
