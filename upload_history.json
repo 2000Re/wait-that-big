@@ -351,5 +351,23 @@
     "video_id": "ddi3lqv5VCE",
     "privacy": "public",
     "uploaded_at": "2026-11-24T12:25:14+00:00"
+  },
+  {
+    "number": 23,
+    "key": "compare:Cuba|United Kingdom",
+    "format": "compare",
+    "countries": [
+      "Cuba",
+      "United Kingdom"
+    ],
+    "date": "2026-11-25",
+    "title": "[23] True size: Cuba vs UK. Which is bigger? 🌍",
+    "title_style": "compare_true_size",
+    "ending": "short_tail",
+    "teaser": null,
+    "answer": "UK is about 2.2× bigger (241,000 km² vs 109,000 km²).",
+    "video_id": "-X5-3TppXO8",
+    "privacy": "public",
+    "uploaded_at": "2026-11-25T00:25:06+00:00"
   }
 ]

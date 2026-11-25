@@ -412,5 +412,24 @@
    "1.56 million km² ÷ 328,000 km² ≈ 5"
   ],
   "image": "img/22-how-many-vietnams-fit-inside-mongolia.jpg"
+ },
+ {
+  "number": 23,
+  "slug": "23-cuba-or-uk-which-is-bigger",
+  "format": "compare",
+  "video_id": "-X5-3TppXO8",
+  "uploaded_at": "2026-11-25T00:25:06+00:00",
+  "question": "Cuba or UK: which is bigger?",
+  "choices": [
+   "Cuba",
+   "UK"
+  ],
+  "answer": 1,
+  "result": "UK is about 2.2× bigger!",
+  "details": [
+   "UK: 241,000 km²",
+   "Cuba: 109,000 km²"
+  ],
+  "image": "img/23-cuba-or-uk-which-is-bigger.jpg"
  }
 ]
