@@ -431,5 +431,20 @@
    "Cuba: 109,000 km²"
   ],
   "image": "img/23-cuba-or-uk-which-is-bigger.jpg"
+ },
+ {
+  "number": 24,
+  "slug": "24-what-if-argentina-were-in-the-middle-east",
+  "format": "overlay",
+  "video_id": "IQwfGcQsOkU",
+  "uploaded_at": "2026-11-25T12:24:40+00:00",
+  "question": "What if Argentina were in the Middle East?",
+  "choices": [],
+  "answer": null,
+  "result": "Argentina would stretch from Turkey to Ethiopia.",
+  "details": [
+   "About 3,700 km from end to end"
+  ],
+  "image": "img/24-what-if-argentina-were-in-the-middle-east.jpg"
  }
 ]
