@@ -31,6 +31,7 @@ EXTRA = {
     "holland": "Netherlands", "korea": "South Korea", "drc": "Dem. Rep. Congo", "dr congo": "Dem. Rep. Congo",
     "usa": "United States of America", "us": "United States of America", "america": "United States of America",
     "united states": "United States of America", "czech republic": "Czechia", "ivory coast": "Côte d'Ivoire",
+    "burma": "Myanmar", "uae": "United Arab Emirates", "emirates": "United Arab Emirates",
 }
 
 

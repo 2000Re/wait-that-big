@@ -85,6 +85,48 @@ C = {
     "Cambodia": ("Cambodia", "Cambodia", "Cambodias"),
     "Nepal": ("Nepal", "Nepal", "Nepals"),
     "Belgium": ("Belgium", "Belgium", "Belgiums"),
+    # 2026-11-26 に追加(コメントに出た国と、国境の争いがない国。争いのある国・地域や、紛争中の国は入れない)
+    "Belarus": ("Belarus", "Belarus", None),
+    "Latvia": ("Latvia", "Latvia", "Latvias"),
+    "Lithuania": ("Lithuania", "Lithuania", "Lithuanias"),
+    "Estonia": ("Estonia", "Estonia", "Estonias"),
+    "Hungary": ("Hungary", "Hungary", "Hungarys"),
+    "Czechia": ("Czechia", "Czechia", "Czechias"),
+    "Slovakia": ("Slovakia", "Slovakia", "Slovakias"),
+    "Bulgaria": ("Bulgaria", "Bulgaria", "Bulgarias"),
+    "Croatia": ("Croatia", "Croatia", "Croatias"),
+    "Cameroon": ("Cameroon", "Cameroon", "Cameroons"),
+    "Ghana": ("Ghana", "Ghana", "Ghanas"),
+    "Côte d'Ivoire": ("Ivory Coast", "Ivory Coast", None),
+    "Senegal": ("Senegal", "Senegal", "Senegals"),
+    "Guinea": ("Guinea", "Guinea", None),
+    "Mali": ("Mali", "Mali", None),
+    "Burkina Faso": ("Burkina Faso", "Burkina Faso", None),
+    "Niger": ("Niger", "Niger", None),
+    "Chad": ("Chad", "Chad", None),
+    "Gabon": ("Gabon", "Gabon", "Gabons"),
+    "Uganda": ("Uganda", "Uganda", "Ugandas"),
+    "Malawi": ("Malawi", "Malawi", "Malawis"),
+    "Zambia": ("Zambia", "Zambia", "Zambias"),
+    "Zimbabwe": ("Zimbabwe", "Zimbabwe", "Zimbabwes"),
+    "Angola": ("Angola", "Angola", "Angolas"),
+    "Mozambique": ("Mozambique", "Mozambique", None),
+    "Namibia": ("Namibia", "Namibia", "Namibias"),
+    "Botswana": ("Botswana", "Botswana", "Botswanas"),
+    "Tunisia": ("Tunisia", "Tunisia", "Tunisias"),
+    "Oman": ("Oman", "Oman", "Omans"),
+    "United Arab Emirates": ("UAE", "the UAE", None),
+    "Jordan": ("Jordan", "Jordan", "Jordans"),
+    "Uzbekistan": ("Uzbekistan", "Uzbekistan", "Uzbekistans"),
+    "Turkmenistan": ("Turkmenistan", "Turkmenistan", "Turkmenistans"),
+    "Bangladesh": ("Bangladesh", "Bangladesh", "Bangladeshes"),
+    "Myanmar": ("Myanmar", "Myanmar", "Myanmars"),
+    "Laos": ("Laos", "Laos", None),
+    "Paraguay": ("Paraguay", "Paraguay", "Paraguays"),
+    "Honduras": ("Honduras", "Honduras", None),
+    "Nicaragua": ("Nicaragua", "Nicaragua", "Nicaraguas"),
+    "Costa Rica": ("Costa Rica", "Costa Rica", "Costa Ricas"),
+    "Panama": ("Panama", "Panama", "Panamas"),
 }
 
 BODY_SHARE_MIN = 0.97         # 大きさを言う回は、本体(描く形)が国全体のこれ以上の国だけ
@@ -359,6 +401,14 @@ def next_format(history):
 # その国(や隣の国)が出る回は、その国の視聴者が集まる(#10 インドネシア → インドネシア 56%、#19 スリランカ → インド 61%)
 # ので、出る回の得点を少し上げる。同じ国が続かない決まり(recent・OFTEN_*)はそのまま
 AUDIENCE_BOOST = {"Indonesia": 1.6, "Philippines": 1.6, "India": 1.4}
+# 2026-11-26 に足した国(なじみの薄い国も多い)。お題の候補の2/3を占めるので、出る割合を少し抑える。
+# リクエストで指定されたときは、この重みは関係なく出る(viewer_requests.py)
+NEWER = {"Belarus", "Latvia", "Lithuania", "Estonia", "Hungary", "Czechia", "Slovakia", "Bulgaria", "Croatia", "Cameroon",
+         "Ghana", "Côte d'Ivoire", "Senegal", "Guinea", "Mali", "Burkina Faso", "Niger", "Chad", "Gabon", "Uganda",
+         "Malawi", "Zambia", "Zimbabwe", "Angola", "Mozambique", "Namibia", "Botswana", "Tunisia", "Oman",
+         "United Arab Emirates", "Jordan", "Uzbekistan", "Turkmenistan", "Bangladesh", "Myanmar", "Laos", "Paraguay",
+         "Honduras", "Nicaragua", "Costa Rica", "Panama"}
+NEWER_WEIGHT = 0.75
 
 PER_COUNTRY = 2       # 選ぶ候補(上位 top 件)の中で、1つの国が占めてよい数
 OFTEN_WINDOW = 20     # この本数のうちに OFTEN_MAX 回出た国は、しばらく出さない
@@ -382,6 +432,8 @@ def choose(fmt, history, seed, top=40, recent=4):
     cands = [c for c in CANDIDATES[fmt]() if c["key"] not in used]
     for c in cands:                  # 視聴者の多い国が出るお題を少し多めに(AUDIENCE_BOOST)
         boost = max([AUDIENCE_BOOST.get(n, 1.0) for n in countries_of(c)] or [1.0])
+        if countries_of(c) & NEWER:
+            boost *= NEWER_WEIGHT
         if boost != 1.0:
             c["score"] = c["score"] * boost
     if fmt == "space_area":         # お題が4つしかないので、AREA_PAIRS の順に出す(最初は冥王星とロシア)
