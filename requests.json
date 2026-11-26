@@ -88,5 +88,25 @@
     "format": null,
     "note": "#18 のコメント",
     "added": "2026-11-24"
+  },
+  {
+    "id": 9,
+    "countries": [
+      "Belarus",
+      "Mongolia"
+    ],
+    "format": null,
+    "note": "#25 のコメント",
+    "added": "2026-11-26"
+  },
+  {
+    "id": 10,
+    "countries": [
+      "Cameroon",
+      "Latvia"
+    ],
+    "format": null,
+    "note": "#25 のコメント",
+    "added": "2026-11-26"
   }
 ]
