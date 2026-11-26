@@ -406,5 +406,24 @@
     "video_id": "P74CoD1csDA",
     "privacy": "public",
     "uploaded_at": "2026-11-26T00:24:48+00:00"
+  },
+  {
+    "number": 26,
+    "key": "overlay:Chile|Europe",
+    "format": "overlay",
+    "countries": [
+      "Chile",
+      "Norway",
+      "Libya"
+    ],
+    "date": "2026-11-26",
+    "title": "[26] What if Chile were in Europe? 🌍",
+    "title_style": "overlay_classic",
+    "ending": "short_tail",
+    "teaser": null,
+    "answer": "It would stretch from Norway to Libya — about 4,300 km.",
+    "video_id": "kqDDQGRR9vY",
+    "privacy": "public",
+    "uploaded_at": "2026-11-26T12:24:32+00:00"
   }
 ]

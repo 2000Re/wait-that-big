@@ -467,5 +467,20 @@
    "255,000 km² ÷ 69,000 km² ≈ 4"
   ],
   "image": "img/25-how-many-irelands-fit-inside-ecuador.jpg"
+ },
+ {
+  "number": 26,
+  "slug": "26-what-if-chile-were-in-europe",
+  "format": "overlay",
+  "video_id": "kqDDQGRR9vY",
+  "uploaded_at": "2026-11-26T12:24:32+00:00",
+  "question": "What if Chile were in Europe?",
+  "choices": [],
+  "answer": null,
+  "result": "Chile would stretch from Norway to Libya.",
+  "details": [
+   "About 4,300 km from end to end"
+  ],
+  "image": "img/26-what-if-chile-were-in-europe.jpg"
  }
 ]
