@@ -388,5 +388,23 @@
     "video_id": "IQwfGcQsOkU",
     "privacy": "public",
     "uploaded_at": "2026-11-25T12:24:40+00:00"
+  },
+  {
+    "number": 25,
+    "key": "fit:Ecuador|Ireland",
+    "format": "fit",
+    "countries": [
+      "Ecuador",
+      "Ireland"
+    ],
+    "date": "2026-11-26",
+    "title": "[25] Guess how many Irelands fit inside Ecuador 🌍",
+    "title_style": "fit_guess",
+    "ending": "short_tail",
+    "teaser": null,
+    "answer": "About 4 (by area: Ecuador 255,000 km² ÷ Ireland 69,000 km²).",
+    "video_id": "P74CoD1csDA",
+    "privacy": "public",
+    "uploaded_at": "2026-11-26T00:24:48+00:00"
   }
 ]

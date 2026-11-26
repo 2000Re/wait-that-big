@@ -446,5 +446,26 @@
    "About 3,700 km from end to end"
   ],
   "image": "img/24-what-if-argentina-were-in-the-middle-east.jpg"
+ },
+ {
+  "number": 25,
+  "slug": "25-how-many-irelands-fit-inside-ecuador",
+  "format": "fit",
+  "video_id": "P74CoD1csDA",
+  "uploaded_at": "2026-11-26T00:24:48+00:00",
+  "question": "How many Irelands fit inside Ecuador?",
+  "choices": [
+   "2",
+   "4",
+   "7"
+  ],
+  "answer": 1,
+  "result": "About 4 Irelands!",
+  "details": [
+   "Ecuador: 255,000 km²",
+   "Ireland: 69,000 km²",
+   "255,000 km² ÷ 69,000 km² ≈ 4"
+  ],
+  "image": "img/25-how-many-irelands-fit-inside-ecuador.jpg"
  }
 ]
