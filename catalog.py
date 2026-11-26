@@ -86,7 +86,7 @@ C = {
     "Nepal": ("Nepal", "Nepal", "Nepals"),
     "Belgium": ("Belgium", "Belgium", "Belgiums"),
     # 2026-11-26 に追加(コメントに出た国と、国境の争いがない国。争いのある国・地域や、紛争中の国は入れない)
-    "Belarus": ("Belarus", "Belarus", None),
+    "Belarus": ("Belarus", "Belarus", "Belaruses"),   # 「Belarus inside Mongolia」のリクエスト(#25)のため複数形を入れた
     "Latvia": ("Latvia", "Latvia", "Latvias"),
     "Lithuania": ("Lithuania", "Lithuania", "Lithuanias"),
     "Estonia": ("Estonia", "Estonia", "Estonias"),
