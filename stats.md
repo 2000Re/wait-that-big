@@ -1,12 +1,12 @@
 # 再生数のまとめ
 
-`stats.py` が毎日作り直す(最終更新 2026-11-26 10:46 JST)。比べるのは投稿から約3日目の再生数(古い動画ほど多くなるのをそろえるため)。「最新の平均」は投稿からの日数がそろっていないので参考。
+`stats.py` が毎日作り直す(最終更新 2026-11-26 11:48 JST)。比べるのは投稿から約3日目の再生数(古い動画ほど多くなるのをそろえるため)。「最新の平均」は投稿からの日数がそろっていないので参考。
 
 ## 全体
 
 | 値 | 3日目の本数 | 平均 | 中央値 | 最新の本数 | 最新の平均(参考) | 平均視聴割合(%) |
 |---|---:|---:|---:|---:|---:|---:|
-| すべて | 19 | 2287 | 1952 | 25 | 2109 | 97 |
+| すべて | 19 | 2287 | 1952 | 25 | 2126 | 97 |
 
 ## title_style
 
@@ -18,7 +18,7 @@
 | overlay_true_size | 1 | 3073 | 3073 | 1 | 3228 | 98 |
 | fit_can_you | 1 | 2618 | 2618 | 1 | 2655 | 91 |
 | fit_true_size | 1 | 2381 | 2381 | 1 | 2381 | 82 |
-| overlay_on_top | 1 | 2368 | 2368 | 1 | 2368 | 103 |
+| overlay_on_top | 1 | 2368 | 2368 | 1 | 2364 | 103 |
 | (なし) | 4 | 2041 | 1903 | 4 | 2076 | 93 |
 | overlay_drop | 1 | 1952 | 1952 | 1 | 2004 | 99 |
 | compare_lying | 1 | 1897 | 1897 | 1 | 1916 | 82 |
@@ -26,20 +26,20 @@
 | fit_vs | 1 | 1647 | 1647 | 1 | 1693 | 90 |
 | space_really | 1 | 1564 | 1564 | 1 | 1588 | 79 |
 | compare_actually | 1 | 1533 | 1533 | 1 | 1566 | 90 |
-| fit_guess | 1 | 1495 | 1495 | 2 | 986 | 92 |
+| fit_guess | 1 | 1495 | 1495 | 2 | 1136 | 92 |
 | space_classic | 1 | 1494 | 1494 | 1 | 1531 | 81 |
 | space_area_really | 0 |  |  | 1 | 1262 | 66 |
 | shape_continent | 0 |  |  | 1 | 2108 | 238 |
 | fit_classic | 0 |  |  | 1 | 1575 |  |
 | compare_true_size | 0 |  |  | 1 | 1497 |  |
-| overlay_surprise | 0 |  |  | 1 | 1533 |  |
+| overlay_surprise | 0 |  |  | 1 | 1662 |  |
 
 ## format
 
 | 値 | 3日目の本数 | 平均 | 中央値 | 最新の本数 | 最新の平均(参考) | 平均視聴割合(%) |
 |---|---:|---:|---:|---:|---:|---:|
-| overlay | 5 | 2979 | 2368 | 6 | 2793 | 100 |
-| fit | 6 | 2409 | 2500 | 8 | 2094 | 94 |
+| overlay | 5 | 2979 | 2368 | 6 | 2814 | 100 |
+| fit | 6 | 2409 | 2500 | 8 | 2131 | 94 |
 | compare | 5 | 1877 | 1533 | 6 | 1836 | 88 |
 | shape | 1 | 1667 | 1667 | 2 | 1912 | 161 |
 | space | 2 | 1529 | 1529 | 2 | 1560 | 80 |
@@ -49,18 +49,18 @@
 
 | 値 | 3日目の本数 | 平均 | 中央値 | 最新の本数 | 最新の平均(参考) | 平均視聴割合(%) |
 |---|---:|---:|---:|---:|---:|---:|
-| short_tail | 5 | 3031 | 2381 | 11 | 2163 | 111 |
+| short_tail | 5 | 3031 | 2381 | 11 | 2201 | 111 |
 | (なし) | 14 | 2022 | 1657 | 14 | 2067 | 90 |
 
 ## 投稿の時間帯
 
 | 値 | 3日目の本数 | 平均 | 中央値 | 最新の本数 | 最新の平均(参考) | 平均視聴割合(%) |
 |---|---:|---:|---:|---:|---:|---:|
-| 09時台 | 4 | 3129 | 2740 | 6 | 2431 | 89 |
+| 09時台 | 4 | 3129 | 2740 | 6 | 2481 | 89 |
 | 12時台 | 8 | 2115 | 2006 | 9 | 2055 | 89 |
 | 19時台 | 6 | 2102 | 1810 | 6 | 2163 | 93 |
 | 16時台 | 1 | 1413 | 1413 | 1 | 1450 | 89 |
-| 21時台 | 0 |  |  | 2 | 1554 |  |
+| 21時台 | 0 |  |  | 2 | 1618 |  |
 | 10時台 | 0 |  |  | 1 | 2108 | 238 |
 
 ## 日別の再生と流入元(直近28日、YouTube Analytics。2〜3日遅れ)
@@ -79,18 +79,46 @@
 | 2026-11-14 | 4307 | 4158 | 97% |
 | 2026-11-13 | 8 | 6 | 75% |
 
+## 視聴者の国(直近28日、上位10か国。YouTube Analytics)
+
+| 国 | 再生 | 上位の中の割合 |
+|---|---:|---:|
+| アメリカ (US) | 18203 | 52% |
+| インドネシア (ID) | 5028 | 14% |
+| フィリピン (PH) | 3519 | 10% |
+| インド (IN) | 3392 | 10% |
+| イギリス (GB) | 1066 | 3% |
+| マレーシア (MY) | 878 | 3% |
+| ベトナム (VN) | 786 | 2% |
+| オーストラリア (AU) | 755 | 2% |
+| カナダ (CA) | 613 | 2% |
+| ドイツ (DE) | 523 | 2% |
+
+## 再生の多い動画の国(上位5か国、投稿からの全期間)
+
+| # | 答え | 国の内訳 |
+|---:|---|---|
+| 10 | It would stretch from Mali to Kenya — about 5,300 km. | インドネシア 56%, アメリカ 21%, フィリピン 11%, インド 7%, マレーシア 4% |
+| 2 | About 12 (by area: Greenland 2.17 million km² ÷ Uruguay 177, | アメリカ 57%, インドネシア 15%, フィリピン 11%, インド 10%, イギリス 7% |
+| 16 | About 33 (by area: Canada 9.92 million km² ÷ Italy 301,000 k | アメリカ 40%, フィリピン 26%, インド 21%, イギリス 7%, インドネシア 7% |
+| 15 | It would stretch from Peru to Brazil — about 3,300 km. | アメリカ 41%, インド 25%, フィリピン 16%, インドネシア 10%, イギリス 9% |
+| 13 | Nigeria is about 2.3× bigger (908,000 km² vs 387,000 km²). | アメリカ 35%, インド 24%, フィリピン 23%, イギリス 10%, インドネシア 8% |
+| 14 | About 7 (by area: Greenland 2.17 million km² ÷ Poland 314,00 | アメリカ 44%, フィリピン 20%, インド 15%, インドネシア 15%, ポーランド 5% |
+| 3 | It would stretch from Italy to India — about 5,300 km. | インド 32%, アメリカ 30%, インドネシア 23%, フィリピン 11%, イギリス 4% |
+| 19 | About 129 (by area: Brazil 8.47 million km² ÷ Sri Lanka 66,0 | インド 61%, フィリピン 20%, アメリカ 15%, インドネシア 5% |
+
 ## 動画ごと(新しい順)
 
 | # | 答え | 投稿(JST) | 1日目 | 3日目 | 7日目 | 最新 | 高評価 | コメント | 平均視聴割合 | 登録者+ |
 |---:|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| [25](https://youtube.com/shorts/P74CoD1csDA) | About 4 (by area: Ecuador 255,000 km² ÷ Ireland 69,000 km²). | 11-26 09:24 |  |  |  | 441 | 11 | 2 |  |  |
-| [24](https://youtube.com/shorts/IQwfGcQsOkU) | It would stretch from Turkey to Ethiopia — about 3,700 km. | 11-25 21:24 |  |  |  | 1533 | 12 | 0 |  |  |
+| [25](https://youtube.com/shorts/P74CoD1csDA) | About 4 (by area: Ecuador 255,000 km² ÷ Ireland 69,000 km²). | 11-26 09:24 |  |  |  | 739 | 13 | 2 |  |  |
+| [24](https://youtube.com/shorts/IQwfGcQsOkU) | It would stretch from Turkey to Ethiopia — about 3,700 km. | 11-25 21:24 |  |  |  | 1662 | 12 | 1 |  |  |
 | [23](https://youtube.com/shorts/-X5-3TppXO8) | UK is about 2.2× bigger (241,000 km² vs 109,000 km²). | 11-25 09:25 | 1497 |  |  | 1497 | 12 | 0 |  |  |
 | [22](https://youtube.com/shorts/ddi3lqv5VCE) | About 5 (by area: Mongolia 1.56 million km² ÷ Vietnam 328,000 km²). | 11-24 21:25 | 1575 |  |  | 1575 | 10 | 1 |  |  |
 | [21](https://youtube.com/shorts/LONjkoLLbv8) | Vietnam. It's about the same size as Finland (328,000 km²). | 11-24 10:24 | 1991 |  |  | 2108 | 12 | 7 | 238% | 0 |
 | [20](https://youtube.com/shorts/8Ucf1t1Opz0) | Pluto is bigger: Pluto's whole surface is about 17.7 million km², Russia is about 17.1 million km² (Russia fills 96% of Pluto's surface). | 11-23 12:25 | 1043 |  |  | 1262 | 14 | 2 | 66% | 1 |
 | [19](https://youtube.com/shorts/4ugozYe5xJw) | About 129 (by area: Brazil 8.47 million km² ÷ Sri Lanka 66,000 km²). | 11-23 09:27 | 1986 | 2381 |  | 2381 | 32 | 1 | 82% | 0 |
-| [18](https://youtube.com/shorts/rPldw7vfqVw) | It would stretch from Ireland to Turkey — about 3,300 km. | 11-22 12:24 | 2220 | 2368 |  | 2368 | 15 | 4 | 103% | 2 |
+| [18](https://youtube.com/shorts/rPldw7vfqVw) | It would stretch from Ireland to Turkey — about 3,300 km. | 11-22 12:24 | 2220 | 2368 |  | 2364 | 15 | 4 | 103% | 2 |
 | [17](https://youtube.com/shorts/ig3ZTUk7umM) | Russia is about 1.7× bigger (16.97 million km² vs 9.92 million km²). | 11-22 09:25 | 1841 | 1897 |  | 1916 | 12 | 1 | 82% | 0 |
 | [16](https://youtube.com/shorts/lrHMN5VP-v4) | About 33 (by area: Canada 9.92 million km² ÷ Italy 301,000 km²). | 11-21 12:25 | 3263 | 3369 |  | 3475 | 33 | 6 | 106% | 2 |
 | [15](https://youtube.com/shorts/2PXVhnNkgAQ) | It would stretch from Peru to Brazil — about 3,300 km. | 11-21 09:24 | 4926 | 5140 |  | 5234 | 51 | 2 | 103% | 8 |
