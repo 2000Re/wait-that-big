@@ -355,6 +355,11 @@ def next_format(history):
     return FORMATS[(FORMATS.index(last) + 1) % len(FORMATS)] if last else FORMATS[0]
 
 
+# 視聴者の多い国(2026-11-26 の stats.md: アメリカ 52%・インドネシア 14%・フィリピン 10%・インド 10%)。
+# その国(や隣の国)が出る回は、その国の視聴者が集まる(#10 インドネシア → インドネシア 56%、#19 スリランカ → インド 61%)
+# ので、出る回の得点を少し上げる。同じ国が続かない決まり(recent・OFTEN_*)はそのまま
+AUDIENCE_BOOST = {"Indonesia": 1.6, "Philippines": 1.6, "India": 1.4}
+
 PER_COUNTRY = 2       # 選ぶ候補(上位 top 件)の中で、1つの国が占めてよい数
 OFTEN_WINDOW = 20     # この本数のうちに OFTEN_MAX 回出た国は、しばらく出さない
 OFTEN_MAX = 2
@@ -375,6 +380,10 @@ def choose(fmt, history, seed, top=40, recent=4):
     regions = {r[0] for r in REGIONS}          # 行き先の地域は4つしかないので、この条件の対象にしない
     avoid |= {n for n, k in seen.items() if k >= OFTEN_MAX and n not in regions}
     cands = [c for c in CANDIDATES[fmt]() if c["key"] not in used]
+    for c in cands:                  # 視聴者の多い国が出るお題を少し多めに(AUDIENCE_BOOST)
+        boost = max([AUDIENCE_BOOST.get(n, 1.0) for n in countries_of(c)] or [1.0])
+        if boost != 1.0:
+            c["score"] = c["score"] * boost
     if fmt == "space_area":         # お題が4つしかないので、AREA_PAIRS の順に出す(最初は冥王星とロシア)
         return cands[0] if cands else None
     cands.sort(key=lambda c: -c["score"])
