@@ -444,5 +444,22 @@
     "video_id": "cXo6TBpayYE",
     "privacy": "public",
     "uploaded_at": "2026-11-27T00:25:01+00:00"
+  },
+  {
+    "number": 28,
+    "key": "shape:Bangladesh",
+    "format": "shape",
+    "countries": [
+      "Bangladesh"
+    ],
+    "date": "2026-11-27",
+    "title": "[28] Guess the country from its outline 🌍",
+    "title_style": "shape_outline",
+    "ending": "short_tail",
+    "teaser": null,
+    "answer": "Bangladesh. It's about the same size as Greece (135,000 km²).",
+    "video_id": "dBL_pOnGjnQ",
+    "privacy": "public",
+    "uploaded_at": "2026-11-27T12:24:43+00:00"
   }
 ]

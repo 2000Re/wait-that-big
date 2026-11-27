@@ -497,5 +497,25 @@
    "About 1,800 km from end to end"
   ],
   "image": "img/27-what-if-philippines-were-in-africa.jpg"
+ },
+ {
+  "number": 28,
+  "slug": "28-which-country-is-this",
+  "format": "shape",
+  "video_id": "dBL_pOnGjnQ",
+  "uploaded_at": "2026-11-27T12:24:43+00:00",
+  "question": "Which country is this?",
+  "choices": [
+   "Bangladesh",
+   "Cambodia",
+   "Vietnam"
+  ],
+  "answer": 0,
+  "result": "It's Bangladesh!",
+  "details": [
+   "Bangladesh: 135,000 km²",
+   "About the same size as Greece"
+  ],
+  "image": "img/28-which-country-is-this.jpg"
  }
 ]
