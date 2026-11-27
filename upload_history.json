@@ -425,5 +425,24 @@
     "video_id": "kqDDQGRR9vY",
     "privacy": "public",
     "uploaded_at": "2026-11-26T12:24:32+00:00"
+  },
+  {
+    "number": 27,
+    "key": "overlay:Philippines|Africa",
+    "format": "overlay",
+    "countries": [
+      "Philippines",
+      "Chad",
+      "Dem. Rep. Congo"
+    ],
+    "date": "2026-11-27",
+    "title": "[27] Drop Philippines on Africa: where does it reach? 🌍",
+    "title_style": "overlay_drop",
+    "ending": "short_tail",
+    "teaser": null,
+    "answer": "It would stretch from Chad to DR Congo — about 1,800 km.",
+    "video_id": "cXo6TBpayYE",
+    "privacy": "public",
+    "uploaded_at": "2026-11-27T00:25:01+00:00"
   }
 ]

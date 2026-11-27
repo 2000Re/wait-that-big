@@ -482,5 +482,20 @@
    "About 4,300 km from end to end"
   ],
   "image": "img/26-what-if-chile-were-in-europe.jpg"
+ },
+ {
+  "number": 27,
+  "slug": "27-what-if-philippines-were-in-africa",
+  "format": "overlay",
+  "video_id": "cXo6TBpayYE",
+  "uploaded_at": "2026-11-27T00:25:01+00:00",
+  "question": "What if Philippines were in Africa?",
+  "choices": [],
+  "answer": null,
+  "result": "Philippines would stretch from Chad to DR Congo.",
+  "details": [
+   "About 1,800 km from end to end"
+  ],
+  "image": "img/27-what-if-philippines-were-in-africa.jpg"
  }
 ]
