@@ -108,5 +108,14 @@
     "format": null,
     "note": "#25 のコメント",
     "added": "2026-11-26"
+  },
+  {
+    "id": 11,
+    "countries": [
+      "Bangladesh"
+    ],
+    "format": null,
+    "note": "#6 のコメント",
+    "added": "2026-11-27"
   }
 ]
