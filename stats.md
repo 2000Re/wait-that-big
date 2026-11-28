@@ -1,49 +1,49 @@
 # 再生数のまとめ
 
-`stats.py` が毎日作り直す(最終更新 2026-11-28 09:22 JST)。比べるのは投稿から約3日目の再生数(古い動画ほど多くなるのをそろえるため)。「最新の平均」は投稿からの日数がそろっていないので参考。
+`stats.py` が毎日作り直す(最終更新 2026-11-28 10:27 JST)。比べるのは投稿から約3日目の再生数(古い動画ほど多くなるのをそろえるため)。「最新の平均」は投稿からの日数がそろっていないので参考。
 
 ## 全体
 
 | 値 | 3日目の本数 | 平均 | 中央値 | 最新の本数 | 最新の平均(参考) | 平均視聴割合(%) |
 |---|---:|---:|---:|---:|---:|---:|
-| すべて | 22 | 2218 | 1960 | 28 | 2119 | 97 |
+| すべて | 23 | 2188 | 1952 | 29 | 2067 | 97 |
 
 ## title_style
 
 | 値 | 3日目の本数 | 平均 | 中央値 | 最新の本数 | 最新の平均(参考) | 平均視聴割合(%) |
 |---|---:|---:|---:|---:|---:|---:|
-| overlay_really | 1 | 5140 | 5140 | 1 | 5253 | 103 |
+| overlay_really | 1 | 5140 | 5140 | 1 | 5254 | 103 |
 | fit_fill | 1 | 3369 | 3369 | 1 | 3484 | 106 |
 | compare_guess | 1 | 3099 | 3099 | 1 | 3127 | 89 |
-| overlay_true_size | 1 | 3073 | 3073 | 1 | 3236 | 98 |
+| overlay_true_size | 1 | 3073 | 3073 | 2 | 1912 | 98 |
 | fit_can_you | 1 | 2618 | 2618 | 1 | 2664 | 91 |
 | fit_true_size | 1 | 2381 | 2381 | 1 | 2389 | 82 |
 | overlay_on_top | 1 | 2368 | 2368 | 1 | 2376 | 104 |
 | shape_continent | 1 | 2107 | 2107 | 1 | 2112 | 194 |
 | (なし) | 4 | 2041 | 1903 | 4 | 2080 | 93 |
-| fit_classic | 1 | 1968 | 1968 | 1 | 1968 | 85 |
+| fit_classic | 1 | 1968 | 1968 | 1 | 1964 | 85 |
 | overlay_drop | 1 | 1952 | 1952 | 2 | 1674 | 100 |
 | compare_lying | 1 | 1897 | 1897 | 1 | 1923 | 84 |
 | shape_classic | 1 | 1667 | 1667 | 1 | 1722 | 84 |
 | fit_vs | 1 | 1647 | 1647 | 1 | 1697 | 90 |
 | space_really | 1 | 1564 | 1564 | 1 | 1590 | 80 |
 | compare_actually | 1 | 1533 | 1533 | 1 | 1569 | 90 |
-| fit_guess | 1 | 1495 | 1495 | 2 | 1568 | 110 |
+| compare_true_size | 1 | 1518 | 1518 | 1 | 1518 | 106 |
+| fit_guess | 1 | 1495 | 1495 | 2 | 1570 | 110 |
 | space_classic | 1 | 1494 | 1494 | 1 | 1533 | 82 |
 | space_area_really | 1 | 1260 | 1260 | 1 | 1264 | 67 |
-| compare_true_size | 0 |  |  | 1 | 1518 | 106 |
-| overlay_surprise | 0 |  |  | 1 | 1777 | 98 |
-| overlay_classic | 0 |  |  | 1 | 1947 |  |
+| overlay_surprise | 0 |  |  | 1 | 1779 | 98 |
+| overlay_classic | 0 |  |  | 1 | 1967 |  |
 | shape_outline | 0 |  |  | 1 | 1390 |  |
 
 ## format
 
 | 値 | 3日目の本数 | 平均 | 中央値 | 最新の本数 | 最新の平均(参考) | 平均視聴割合(%) |
 |---|---:|---:|---:|---:|---:|---:|
-| overlay | 5 | 2979 | 2368 | 8 | 2542 | 100 |
+| overlay | 5 | 2979 | 2368 | 9 | 2327 | 100 |
 | fit | 7 | 2346 | 2381 | 8 | 2292 | 97 |
 | shape | 2 | 1887 | 1887 | 3 | 1741 | 139 |
-| compare | 5 | 1877 | 1533 | 6 | 1844 | 91 |
+| compare | 6 | 1817 | 1526 | 6 | 1844 | 91 |
 | space | 2 | 1529 | 1529 | 2 | 1562 | 81 |
 | space_area | 1 | 1260 | 1260 | 1 | 1264 | 67 |
 
@@ -51,18 +51,18 @@
 
 | 値 | 3日目の本数 | 平均 | 中央値 | 最新の本数 | 最新の平均(参考) | 平均視聴割合(%) |
 |---|---:|---:|---:|---:|---:|---:|
-| short_tail | 8 | 2561 | 2238 | 14 | 2167 | 105 |
+| short_tail | 9 | 2445 | 2107 | 15 | 2063 | 105 |
 | (なし) | 14 | 2022 | 1657 | 14 | 2072 | 91 |
 
 ## 投稿の時間帯
 
 | 値 | 3日目の本数 | 平均 | 中央値 | 最新の本数 | 最新の平均(参考) | 平均視聴割合(%) |
 |---|---:|---:|---:|---:|---:|---:|
-| 09時台 | 4 | 3129 | 2740 | 7 | 2450 | 99 |
+| 09時台 | 5 | 2807 | 2381 | 8 | 2218 | 99 |
 | 10時台 | 1 | 2107 | 2107 | 1 | 2112 | 194 |
 | 19時台 | 6 | 2102 | 1810 | 6 | 2167 | 94 |
 | 12時台 | 9 | 2020 | 1647 | 9 | 2060 | 90 |
-| 21時台 | 1 | 1968 | 1968 | 4 | 1770 | 91 |
+| 21時台 | 1 | 1968 | 1968 | 4 | 1775 | 91 |
 | 16時台 | 1 | 1413 | 1413 | 1 | 1456 | 89 |
 
 ## 日別の再生と流入元(直近28日、YouTube Analytics。2〜3日遅れ)
@@ -125,20 +125,21 @@
 
 | # | 答え | 投稿(JST) | 1日目 | 3日目 | 7日目 | 最新 | 高評価 | コメント | 平均視聴割合 | 登録者+ |
 |---:|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| [29](https://youtube.com/shorts/CdmN7J2hljs) | It would stretch from Iran to Ethiopia — about 3,100 km. | 11-28 09:24 |  |  |  | 588 | 4 | 0 |  |  |
 | [28](https://youtube.com/shorts/dBL_pOnGjnQ) | Bangladesh. It's about the same size as Greece (135,000 km²). | 11-27 21:24 |  |  |  | 1390 | 12 | 0 |  |  |
-| [27](https://youtube.com/shorts/cXo6TBpayYE) | It would stretch from Chad to DR Congo — about 1,800 km. | 11-27 09:25 |  |  |  | 1341 | 11 | 0 |  |  |
-| [26](https://youtube.com/shorts/kqDDQGRR9vY) | It would stretch from Norway to Libya — about 4,300 km. | 11-26 21:24 | 1947 |  |  | 1947 | 7 | 1 |  |  |
-| [25](https://youtube.com/shorts/P74CoD1csDA) | About 4 (by area: Ecuador 255,000 km² ÷ Ireland 69,000 km²). | 11-26 09:24 | 1546 |  |  | 1600 | 16 | 2 | 127% | 0 |
-| [24](https://youtube.com/shorts/IQwfGcQsOkU) | It would stretch from Turkey to Ethiopia — about 3,700 km. | 11-25 21:24 | 1718 |  |  | 1777 | 13 | 1 | 98% | 1 |
-| [23](https://youtube.com/shorts/-X5-3TppXO8) | UK is about 2.2× bigger (241,000 km² vs 109,000 km²). | 11-25 09:25 | 1497 |  |  | 1518 | 12 | 0 | 106% | 0 |
-| [22](https://youtube.com/shorts/ddi3lqv5VCE) | About 5 (by area: Mongolia 1.56 million km² ÷ Vietnam 328,000 km²). | 11-24 21:25 | 1575 | 1968 |  | 1968 | 11 | 1 | 85% | 0 |
+| [27](https://youtube.com/shorts/cXo6TBpayYE) | It would stretch from Chad to DR Congo — about 1,800 km. | 11-27 09:25 | 1339 |  |  | 1339 | 11 | 0 |  |  |
+| [26](https://youtube.com/shorts/kqDDQGRR9vY) | It would stretch from Norway to Libya — about 4,300 km. | 11-26 21:24 | 1947 |  |  | 1967 | 7 | 1 |  |  |
+| [25](https://youtube.com/shorts/P74CoD1csDA) | About 4 (by area: Ecuador 255,000 km² ÷ Ireland 69,000 km²). | 11-26 09:24 | 1546 |  |  | 1604 | 16 | 2 | 127% | 0 |
+| [24](https://youtube.com/shorts/IQwfGcQsOkU) | It would stretch from Turkey to Ethiopia — about 3,700 km. | 11-25 21:24 | 1718 |  |  | 1779 | 13 | 1 | 98% | 1 |
+| [23](https://youtube.com/shorts/-X5-3TppXO8) | UK is about 2.2× bigger (241,000 km² vs 109,000 km²). | 11-25 09:25 | 1497 | 1518 |  | 1518 | 12 | 0 | 106% | 0 |
+| [22](https://youtube.com/shorts/ddi3lqv5VCE) | About 5 (by area: Mongolia 1.56 million km² ÷ Vietnam 328,000 km²). | 11-24 21:25 | 1575 | 1968 |  | 1964 | 11 | 1 | 85% | 0 |
 | [21](https://youtube.com/shorts/LONjkoLLbv8) | Vietnam. It's about the same size as Finland (328,000 km²). | 11-24 10:24 | 1991 | 2107 |  | 2112 | 12 | 7 | 194% | 1 |
 | [20](https://youtube.com/shorts/8Ucf1t1Opz0) | Pluto is bigger: Pluto's whole surface is about 17.7 million km², Russia is about 17.1 million km² (Russia fills 96% of Pluto's surface). | 11-23 12:25 | 1043 | 1260 |  | 1264 | 14 | 2 | 67% | 2 |
 | [19](https://youtube.com/shorts/4ugozYe5xJw) | About 129 (by area: Brazil 8.47 million km² ÷ Sri Lanka 66,000 km²). | 11-23 09:27 | 1986 | 2381 |  | 2389 | 32 | 1 | 82% | 0 |
 | [18](https://youtube.com/shorts/rPldw7vfqVw) | It would stretch from Ireland to Turkey — about 3,300 km. | 11-22 12:24 | 2220 | 2368 |  | 2376 | 15 | 4 | 104% | 2 |
 | [17](https://youtube.com/shorts/ig3ZTUk7umM) | Russia is about 1.7× bigger (16.97 million km² vs 9.92 million km²). | 11-22 09:25 | 1841 | 1897 |  | 1923 | 12 | 1 | 84% | 0 |
 | [16](https://youtube.com/shorts/lrHMN5VP-v4) | About 33 (by area: Canada 9.92 million km² ÷ Italy 301,000 km²). | 11-21 12:25 | 3263 | 3369 |  | 3484 | 33 | 6 | 106% | 2 |
-| [15](https://youtube.com/shorts/2PXVhnNkgAQ) | It would stretch from Peru to Brazil — about 3,300 km. | 11-21 09:24 | 4926 | 5140 |  | 5253 | 51 | 2 | 103% | 8 |
+| [15](https://youtube.com/shorts/2PXVhnNkgAQ) | It would stretch from Peru to Brazil — about 3,300 km. | 11-21 09:24 | 4926 | 5140 | 5254 | 5254 | 51 | 2 | 103% | 8 |
 | [14](https://youtube.com/shorts/WPYR647yIbk) | About 7 (by area: Greenland 2.17 million km² ÷ Poland 314,000 km²). | 11-20 12:32 | 1930 | 2618 | 2664 | 2664 | 18 | 1 | 91% | 2 |
 | [13](https://youtube.com/shorts/AtIVXR5uG0Y) | Nigeria is about 2.3× bigger (908,000 km² vs 387,000 km²). | 11-20 09:34 | 1571 | 3099 | 3125 | 3127 | 34 | 2 | 89% | 1 |
 | [12](https://youtube.com/shorts/uJ3qtY3mS48) | Cuba. It's about the same size as Iceland (109,000 km²). | 11-19 19:41 | 1401 | 1667 | 1722 | 1722 | 19 | 3 | 84% | 3 |
