@@ -415,6 +415,19 @@ OFTEN_WINDOW = 20     # この本数のうちに OFTEN_MAX 回出た国は、し
 OFTEN_MAX = 2
 
 
+# 日本の回(2026-11-28〜): JAPAN_EVERY 本に1本ほど、日本が出るお題にする(「グリーンランドに日本はいくつ入る？」
+# 「日本をヨーロッパに重ねると？」など)。日本語の題名(locales.py)で、日本の視聴者にも届きやすくする。
+# 形式は CYCLE のままで、日本のお題がある形式(fit・overlay・compare)の回だけ。直近 JAPAN_EVERY - 1 本に
+# 日本が出ていなければ、その回を日本の回にする。日本のお題を出し終えたら、ふつうの回だけに戻る
+JAPAN = "Japan"
+JAPAN_EVERY = 4
+JAPAN_FORMATS = {"fit", "overlay", "compare"}
+
+
+def japan_due(fmt, history):
+    return fmt in JAPAN_FORMATS and not any(JAPAN in shown_in(h) for h in history[-(JAPAN_EVERY - 1):])
+
+
 def choose(fmt, history, seed, top=40, recent=4):
     """まだ出していないお題から、得点の高いものを中心に選ぶ。次の国・天体・地域は避ける
     (比べる相手、overlay の行き先と端の国も含む):
@@ -436,6 +449,13 @@ def choose(fmt, history, seed, top=40, recent=4):
             boost *= NEWER_WEIGHT
         if boost != 1.0:
             c["score"] = c["score"] * boost
+    if japan_due(fmt, history):
+        jp = [c for c in cands if JAPAN in countries_of(c)]
+        # 相手の国だけ、直近に出たものを避ける(日本そのものは出やすさの決まりの対象にしない)
+        jp = [c for c in jp if not (countries_of(c) - {JAPAN}) & avoid] or jp
+        if jp:
+            jp = sorted(jp, key=lambda c: -c["score"])[:4]       # 得点の高い4つから(驚きの大きいお題を先に)
+            return random.Random(seed).choices(jp, weights=[c["score"] for c in jp])[0]
     if fmt == "space_area":         # お題が4つしかないので、AREA_PAIRS の順に出す(最初は冥王星とロシア)
         return cands[0] if cands else None
     cands.sort(key=lambda c: -c["score"])
