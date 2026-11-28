@@ -532,5 +532,26 @@
    "About 3,100 km from end to end"
   ],
   "image": "img/29-what-if-india-were-in-the-middle-east.jpg"
+ },
+ {
+  "number": 30,
+  "slug": "30-how-many-denmarks-fit-inside-zambia",
+  "format": "fit",
+  "video_id": "9qGe0b8zbJ8",
+  "uploaded_at": "2026-11-28T12:25:02+00:00",
+  "question": "How many Denmarks fit inside Zambia?",
+  "choices": [
+   "5",
+   "11",
+   "18"
+  ],
+  "answer": 2,
+  "result": "About 18 Denmarks!",
+  "details": [
+   "Zambia: 753,000 km²",
+   "Denmark: 43,000 km²",
+   "753,000 km² ÷ 43,000 km² ≈ 18"
+  ],
+  "image": "img/30-how-many-denmarks-fit-inside-zambia.jpg"
  }
 ]

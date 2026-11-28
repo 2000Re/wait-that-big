@@ -480,5 +480,23 @@
     "video_id": "CdmN7J2hljs",
     "privacy": "public",
     "uploaded_at": "2026-11-28T00:24:15+00:00"
+  },
+  {
+    "number": 30,
+    "key": "fit:Zambia|Denmark",
+    "format": "fit",
+    "countries": [
+      "Zambia",
+      "Denmark"
+    ],
+    "date": "2026-11-28",
+    "title": "[30] Zambia vs Denmark: how many fit inside? 🌍",
+    "title_style": "fit_vs",
+    "ending": "short_tail",
+    "teaser": 3,
+    "answer": "About 18 (by area: Zambia 753,000 km² ÷ Denmark 43,000 km²).",
+    "video_id": "9qGe0b8zbJ8",
+    "privacy": "public",
+    "uploaded_at": "2026-11-28T12:25:02+00:00"
   }
 ]
