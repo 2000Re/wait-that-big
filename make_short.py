@@ -237,6 +237,7 @@ def main():
         "number": number,
         "key": c["key"],
         "format": c["format"],
+        "category": "japan" if K.JAPAN in K.countries_of(c) else None,   # 日本の回(catalog.japan_due)。stats.md で比べる
         "countries": info["countries"],
         "date": now.date().isoformat(),
         "title": f"[{number}] {title}",

@@ -69,7 +69,7 @@ REGIONS = {
     "South America": {"ja": "南アメリカ", "es": "Sudamérica", "fr": "l'Amérique du Sud", "de": "Südamerika",
                       "pt": "a América do Sul"},
     "the Middle East": {"ja": "中東", "es": "Oriente Medio", "fr": "le Moyen-Orient", "de": "den Nahen Osten",
-                        "pt": "o Oriente Médio"},
+                        "pt": "o Oriente Médio"}
 }
 
 # 大陸(Natural Earth の CONTINENT)
